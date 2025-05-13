@@ -11,15 +11,11 @@
 </template>
 <script setup>
 import { onMounted } from 'vue';
-import { useLoginStore } from '@/stores/login-store';
+import { useLoginStore } from '@/stores/auth/login-store';
 const loginStore = useLoginStore();
 
 onMounted(() => {
-    console.log('Registration Step 2 mounted');
-    // const emailInput = document.querySelector('input[type="text"]');
-    // if (emailInput) {
-    //     emailInput.focus();
-    // }
+    console.log('Login Step 2 mounted');
 });
 
       

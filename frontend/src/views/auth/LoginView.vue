@@ -5,22 +5,25 @@
             <KeepAlive>
                 <component :is="loginStore.currentStep" />
             </KeepAlive>
+            <RouterLink to="/signup" class="font-medium text-blue-500 hover:text-blue-700 underline">
+                        Create an account
+            </RouterLink>
         </div>
     </div>
 </template>
 <script setup>
-import RegistrationStep1 from './login/RegistrationStep1.vue';
+import LoginStep1 from './login/LoginStep1.vue';
+import LoginStep2 from './login/LoginStep2.vue';
 import { onMounted } from 'vue';
-import RegistrationStep2 from './login/RegistrationStep2.vue';
-import { useLoginStore } from '@/stores/login-store';
+import { useLoginStore } from '@/stores/auth/login-store';
 
 const loginStore = useLoginStore();
 
 onMounted(() => {
 
-    loginStore.currentStep = RegistrationStep1;
-    loginStore.RegistrationStep1 = RegistrationStep1;
-    loginStore.RegistrationStep2 = RegistrationStep2;
+    loginStore.currentStep = LoginStep1;
+    loginStore.LoginStep1 = LoginStep1;
+    loginStore.LoginStep2 = LoginStep2;
 
     console.log('LoginView mounted');
 
