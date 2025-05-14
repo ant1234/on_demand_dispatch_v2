@@ -26,6 +26,10 @@
                         <PaymentIcon class="mt-1" />   
                         <span v-show="toggleSideBar"> Payments</span>
                     </li>
+                    <li class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
+                        <UsersIcon class="mt-1" />
+                        <span v-show="toggleSideBar"> Users</span>
+                    </li>
                     <li class="flex text-red-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
                         <LogoutIcon class="mt-1" />
                         <span v-show="toggleSideBar"> Logout</span>
@@ -68,9 +72,6 @@
 <script setup>
 import ChevronIconLeft from '@/components/icons/ChevronIconLeft.vue';
 import ChevronIconRight from '@/components/icons/ChevronIconRight.vue';
-import HomeIcon from '@/components/icons/HomeIcon.vue';
-import PaymentIcon from '@/components/icons/PaymentIcon.vue';
-import LogoutIcon from '@/components/icons/LogoutIcon.vue';
 import { ref } from 'vue';
 
 const toggleSideBar = ref(false);
