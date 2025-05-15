@@ -8,6 +8,17 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('users', [AuthController::class, 'register'])
-    ->name('users.register');
+Route::controller('Auth\AuthController')->group(function () {
+    
+    Route::post('users', 'register')
+        ->name('users.register');
+
+    Route::post('login', 'login')
+        ->name('users.login');
+
+    Route::post('users/verify-email', 'validateUserEmail')
+        ->name('users.validateUserEmail');
+});
+
+
 

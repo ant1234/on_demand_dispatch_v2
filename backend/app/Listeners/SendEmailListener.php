@@ -25,6 +25,8 @@ class SendEmailListener
     public function handle(SendEmailEvent $event): void
     {
         //
+        sleep(5);   // Simulate a delay of 5 seconds
+        // Send the email
         Mail::to($event->user->email)->send(new SendEmail($event->user));
 
     }
