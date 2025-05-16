@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Mail\SendEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
-use App\Events\SendEmailEvenet;
+use App\Events\SendEmailEvent;
 
 class AuthController extends Controller
 {
@@ -19,7 +19,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required',
         ]);
 
         // Create the user
@@ -31,7 +31,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        SendEmailEvenet::dispatch($user);
+        SendEmailEvent::dispatch($user);
 
         // Return a response
         return response()->json([

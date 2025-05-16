@@ -2,6 +2,8 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
+import { postData } from '@/helper/http';
+import { showError, successMsg } from '@/helper/utils';
 
 
 export const useSignUpStore = defineStore('signup', () => {
@@ -10,6 +12,8 @@ export const useSignUpStore = defineStore('signup', () => {
   const SignUpStep1 = ref('SignUpStep1');
   const SignUpStep2 = ref('SignUpStep2');
   const SignUpStep3 = ref('SignUpStep2');
+  const loading = ref(false);
+
 
   const stepOneInput = ref({
     name: '',
@@ -54,11 +58,30 @@ export const useSignUpStore = defineStore('signup', () => {
   }
 
   async function moveStepThree() {
+
     const isValid = await vStepTwo$.value.$validate();
+    
     if (!isValid) {
       return;
     }
-    currentStep.value = SignUpStep3.value;
+
+    try {
+
+      loading.value = true;
+
+      const data = await postData('/users', {...stepOneInput.value, ...stepTwoInput.value });
+      successMsg(data?.message);
+
+      loading.value = false;
+
+      currentStep.value = SignUpStep3.value;
+
+    } catch (error) {
+      loading.value = false;
+      for(const message in error) {
+        showError(message);
+      }
+    }
   }
 
   async function signUpUser() {
@@ -104,6 +127,7 @@ export const useSignUpStore = defineStore('signup', () => {
     vStepOne$,
     vStepTwo$,
     vStepThree$, 
+    loading,
     moveStepOne, 
     moveStepTwo, 
     moveStepThree,

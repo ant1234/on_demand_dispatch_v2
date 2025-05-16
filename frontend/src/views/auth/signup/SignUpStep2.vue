@@ -1,4 +1,5 @@
 <template>
+    <LoadingInput :loading="loading" />
     <InputError :errors="vStepTwo$.password.$errors">
         <input
             v-model="stepTwoInput.password"
@@ -20,9 +21,10 @@
 import { onMounted } from 'vue';
 import { useSignUpStore } from '@/stores/auth/signup-store';
 import { storeToRefs } from 'pinia';
+import LoadingInput from '@/components/base-components/LoadingInput.vue';
 
 const signUpStore = useSignUpStore();
-const { vStepTwo$, stepTwoInput } = storeToRefs(signUpStore);
+const { vStepTwo$, stepTwoInput, loading } = storeToRefs(signUpStore);
 
 onMounted(() => {
     console.log('Login Step 2 mounted');

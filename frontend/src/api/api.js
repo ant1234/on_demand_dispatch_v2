@@ -1,4 +1,4 @@
 export const App = {
-    baseUrl: 'http://localhost:8000',
-    apiBaseUrl: 'http://localhost:8000/api',
+    baseUrl: 'http://localhost',
+    apiBaseUrl: 'http://localhost/api',
 }
