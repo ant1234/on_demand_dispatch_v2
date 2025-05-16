@@ -16,28 +16,99 @@ export const useSignUpStore = defineStore('signup', () => {
     email: '',
   });
 
-  const v$ = useVuelidate({
+  const stepTwoInput = ref({
+    password: '',
+  });
+
+  const stepThreeInput = ref({
+    opt_code: '',
+  });
+
+  const rulesStepOneInput = {
     name: { required },
     email: { required, email },
-  }, stepOneInput);
+  };
 
-  async function moveStepOne() {
-    const isValid = await v$.value.$validate();
+  const rulesStepTwoInput = {
+    password: { required },
+  };
+
+  const rulesStepThreeInput = {
+    opt_code: { required },
+  };
+
+  const vStepOne$ = useVuelidate(rulesStepOneInput, stepOneInput);
+  const vStepTwo$ = useVuelidate(rulesStepTwoInput, stepTwoInput);
+  const vStepThree$ = useVuelidate(rulesStepThreeInput, stepThreeInput);
+
+  async function moveStepTwo() {
+    const isValid = await vStepOne$.value.$validate();
     if (!isValid) {
       return;
     }
     currentStep.value = SignUpStep2.value;
   }
 
-  function moveStepTwo() {
-    currentStep.value = SignUpStep2.value;
+  async function moveStepOne() {
+    currentStep.value = SignUpStep1.value;
   }
 
-  function moveStepThree() {
+  async function moveStepThree() {
+    const isValid = await vStepTwo$.value.$validate();
+    if (!isValid) {
+      return;
+    }
     currentStep.value = SignUpStep3.value;
   }
 
-  return {currentStep, SignUpStep1, SignUpStep2, SignUpStep3, stepOneInput, v$, moveStepOne, moveStepTwo, moveStepThree}
+  async function signUpUser() {
+    const isValid = await vStepThree$.value.$validate();
+    if (!isValid) {
+      return;
+    }
+
+    try {
+      // Call the API to sign up the user
+      const res = await fetch('/api/users/verify-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: stepOneInput.value.name,
+          email: stepOneInput.value.email,
+          password: stepTwoInput.value.password,
+          opt_code: stepThreeInput.value.opt_code,
+        }),
+      });
+
+      return res.json();
+    }
+    catch (error) {
+      // Handle error
+      console.error('Error signing up:', error);
+      return;
+    }
+    // Call the API to sign up the user
+    // Reset the form and state
+  }
+
+  return {
+    currentStep, 
+    SignUpStep1, 
+    SignUpStep2, 
+    SignUpStep3, 
+    stepOneInput, 
+    stepTwoInput,
+    stepThreeInput,
+    vStepOne$,
+    vStepTwo$,
+    vStepThree$, 
+    moveStepOne, 
+    moveStepTwo, 
+    moveStepThree,
+    signUpUser,
+  };
 });
 
 if(import.meta.hot) {

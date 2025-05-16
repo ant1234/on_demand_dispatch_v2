@@ -6,7 +6,7 @@ import { createPinia } from 'pinia';
 
 const app = createApp(App);
 const pinia = createPinia();
-const importIcons = require.context('./components/icons', true, /\.vue$/);
+const importIcons = require.context('./components/', true, /\.vue$/);
 
 // Register components globally
 function registerComponents() {
