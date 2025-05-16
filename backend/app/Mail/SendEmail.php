@@ -43,7 +43,10 @@ class SendEmail extends Mailable
     {
         return new Content(
             view: 'mail.email-verification',
-            with: ['user' => $this->user],
+            with: [
+                'user' => $this->user,
+                'otp_code' => $this->user->otp_code
+            ],
         );
     }
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('opt_code')->nullable();
+            $table->string('otp_code')->nullable();
             $table->string('is_valid_email')->default('0');
             $table->string('google_id')->nullable();
             $table->string('role')->nullable();

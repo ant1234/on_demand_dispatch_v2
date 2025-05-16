@@ -25,7 +25,7 @@ export const useSignUpStore = defineStore('signup', () => {
   });
 
   const stepThreeInput = ref({
-    opt_code: '',
+    otp_code: '',
   });
 
   const rulesStepOneInput = {
@@ -38,7 +38,7 @@ export const useSignUpStore = defineStore('signup', () => {
   };
 
   const rulesStepThreeInput = {
-    opt_code: { required },
+    otp_code: { required },
   };
 
   const vStepOne$ = useVuelidate(rulesStepOneInput, stepOneInput);
@@ -85,27 +85,23 @@ export const useSignUpStore = defineStore('signup', () => {
   }
 
   async function signUpUser() {
+
     const isValid = await vStepThree$.value.$validate();
     if (!isValid) {
       return;
     }
 
     try {
-      // Call the API to sign up the user
-      const res = await fetch('/api/users/verify-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: stepOneInput.value.name,
-          email: stepOneInput.value.email,
-          password: stepTwoInput.value.password,
-          opt_code: stepThreeInput.value.opt_code,
-        }),
+
+      loading.value = true;
+      const data = await postData('/users/verify-email', {
+        ...stepThreeInput.value
       });
 
-      return res.json();
+      successMsg(data?.message);
+
+      loading.value = false;
+
     }
     catch (error) {
       // Handle error

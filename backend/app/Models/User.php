@@ -27,7 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'opt_code',
+        'otp_code',
         'is_valid_email',
         'google_id',
         'role',

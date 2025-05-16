@@ -1,12 +1,14 @@
 <template>
 
+    <LoadingInput :loading="loading" />
+
     <span class="text-blue-500 font-semibold">
         {{ stepOneInput.email }}
     </span>
 
-    <InputError :errors="vStepThree$.opt_code.$errors">
+    <InputError :errors="vStepThree$.otp_code.$errors">
         <input
-            v-model="stepThreeInput.opt_code"
+            v-model="stepThreeInput.otp_code"
             placeholder="Enter Code"
             type="text"
             class="border mt-2 mb-2 rounded-md py-2 px-2 w-[100%]"
@@ -30,7 +32,7 @@ import { useSignUpStore } from '@/stores/auth/signup-store';
 import { storeToRefs } from 'pinia';
 
 const signUpStore = useSignUpStore();
-const { vStepThree$, stepThreeInput, stepOneInput } = storeToRefs(signUpStore);
+const { vStepThree$, stepThreeInput, stepOneInput, loading } = storeToRefs(signUpStore);
 
 onMounted(() => {
     console.log('Login Step 2 mounted');

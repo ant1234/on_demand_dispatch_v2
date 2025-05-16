@@ -22,11 +22,13 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        $otp_code = User::generateOtp();
+
         // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'otp_code' => null,
+            'otp_code' => $otp_code,
             'is_valid_email' => User::IS_INVALID_EMAIL,
             'password' => bcrypt($request->password),
         ]);

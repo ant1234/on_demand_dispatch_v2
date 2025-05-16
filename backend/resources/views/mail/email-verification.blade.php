@@ -15,7 +15,7 @@
 		<h3>E-mail verification.</h3>
 		<p>Hello, {{$user->name}} <br/>  <br/>
         we have sent to you this email to check if this Email : <a href="#">{{$user->email}}</a> your provide is a valid one; 
-        Enter this Code :{{$user->otp_code}}
+        Enter this Code : {{ $otp_code ?? 'No code available' }}
 	</div>
 
 </div>
