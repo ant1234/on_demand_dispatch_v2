@@ -23,7 +23,8 @@ export function postData(endpoint, input) {
 
         if (typeof responseData?.errors !== 'undefined') {
           // Handle validation errors
-          reject(responseData?.errors);
+          const errors = Array.isArray(responseData?.errors) ? responseData?.errors : Object.values(responseData?.errors);
+          reject(errors);
         } else {
           resolve(responseData);
         }

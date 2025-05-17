@@ -9,6 +9,7 @@ use App\Mail\SendEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Events\SendEmailEvent;
+use DB;
 
 class AuthController extends Controller
 {
@@ -53,18 +54,32 @@ class AuthController extends Controller
         $user = User::getUserByEmail($request->email);
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'User not found.', 'isLogged' => false], 401);
+            return response()->json([
+                'errors' => [
+                    'message' => 'Email or password incorrect.',
+                    // 'isLogged' => false
+                ],
+            ], 401);
         }
 
-        $token = $user->createToken($request->token_name)->plainTextToken;
 
         return response()->json([
             'message' => 'User logged in successfully.',
             'user' => $user,
-            'token' => $token,
+            'token' => $user->otp_code,
             'isLogged' => true
         ], 200);
 
+    }
+
+    public function logout(Request $request)
+    {
+
+        DB::table('personal_access_tokens')
+            ->where('tokenable_id',$request->userId)
+            ->delete();
+
+        return response()->json(['message' => 'User logged out successfully.'], 200);
     }
 
     public function validateUserEmail(Request $request)
@@ -91,7 +106,11 @@ class AuthController extends Controller
         $user->is_valid_email = User::IS_VALID_EMAIL;
         $user->save();
 
-        return response()->json(['message' => 'Email verified successfully.'], 200);
+        return response()->json([
+            'message' => 'Email verified successfully.',
+            'user' => $user,
+            'token' => $user->otp_code,
+        ], 200);
     }
 
 }

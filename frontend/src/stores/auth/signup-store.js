@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { postData } from '@/helper/http';
-import { showError, successMsg } from '@/helper/utils';
+import { showError, successMsg, setUserData } from '@/helper/utils';
 
 
 export const useSignUpStore = defineStore('signup', () => {
@@ -16,8 +16,8 @@ export const useSignUpStore = defineStore('signup', () => {
 
 
   const stepOneInput = ref({
-    name: '',
-    email: '',
+    name: 'joohn',
+    email: 'joohn@gmail.com',
   });
 
   const stepTwoInput = ref({
@@ -95,8 +95,13 @@ export const useSignUpStore = defineStore('signup', () => {
 
       loading.value = true;
       const data = await postData('/users/verify-email', {
+        ...stepOneInput.value,
         ...stepThreeInput.value
       });
+
+      setUserData(data);
+
+      window.location.href = '/app/dashboard';
 
       successMsg(data?.message);
 

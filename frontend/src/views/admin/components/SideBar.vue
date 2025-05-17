@@ -30,7 +30,7 @@
                         <UsersIcon class="mt-1" />
                         <span v-show="toggleSideBar"> Users</span>
                     </li>
-                    <li class="flex text-red-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
+                    <li @click="loginStore.logout" class="flex text-red-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
                         <LogoutIcon class="mt-1" />
                         <span v-show="toggleSideBar"> Logout</span>
                     </li>
@@ -52,11 +52,11 @@
                 />
                 <ul v-show="topNavBarMenu" class="bg-white absolute right-4 py-2 px-2 rounded-md shadow-lg w-[250px] divide-y divide-gray-200">
                     <li class="px-2 py-2">
-                        Ant
+                        {{ userData?.user.name }}
                         <br>
-                        <a href="" class="text-indigo-600">ant@gmail.com</a>
+                        <a href="" class="text-indigo-600">{{ userData?.user.email }}</a>
                     </li>
-                    <li class="px-2 py-2 hover:bg-gray-100 cursor-pointer rounded-md text-red-600 font-semibold">
+                    <li @click="loginStore.logout" class="px-2 py-2 hover:bg-gray-100 cursor-pointer rounded-md text-red-600 font-semibold">
                         Logout
                     </li>
                 </ul>
@@ -73,9 +73,14 @@
 import ChevronIconLeft from '@/components/icons/ChevronIconLeft.vue';
 import ChevronIconRight from '@/components/icons/ChevronIconRight.vue';
 import { ref } from 'vue';
+import { getUserData } from '@/helper/utils';
+import { useLoginStore } from '@/stores/auth/login-store';
+
+const loginStore = useLoginStore();
 
 const toggleSideBar = ref(false);
 const topNavBarMenu = ref(false);
+const userData = getUserData();
 
 const toggle = () => {
     toggleSideBar.value = !toggleSideBar.value;

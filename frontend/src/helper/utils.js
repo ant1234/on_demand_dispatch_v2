@@ -20,6 +20,29 @@ export function successMsg(message) {
   })
 }
 
+export function getUserData() {
+  try {
+
+    const data = localStorage.getItem('userData');
+
+    if(typeof data !== 'object') {
+      return JSON.parse(data);
+    }
+
+  }
+  catch (error) {
+    console.error('Error parsing user data from localStorage:', error?.message);
+  }
+}
+
+export function setUserData(data) {
+  localStorage.setItem('userData', JSON.stringify({
+    user: data?.user,
+    token: data?.token,
+  }));
+
+}
+
 
 
 
