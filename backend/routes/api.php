@@ -21,6 +21,11 @@ Route::controller(AuthController::class)->group(function () {
 
     Route::post('/users/verify-email', 'validateUserEmail')
         ->name('users.validateUserEmail');
+
+    // get requests     
+
+    Route::post('/users', 'getUsers')
+        ->name('users.getUsers');
 });
 
 

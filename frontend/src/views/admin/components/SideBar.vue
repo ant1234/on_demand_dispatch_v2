@@ -62,9 +62,10 @@
                 </ul>
             </div>
         </div>
-        <div class="flex p-10">
+        <!-- <div class="flex p-10">
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga laudantium id nam rerum incidunt dolorem voluptatibus, possimus enim dolorum debitis excepturi commodi quae consectetur corporis cumque dignissimos, quis error quos?</p>
-        </div>
+        </div> -->
+        <slot name="main"></slot>
     </div>
     <!-- main section  -->
 

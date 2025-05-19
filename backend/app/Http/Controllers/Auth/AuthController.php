@@ -72,6 +72,15 @@ class AuthController extends Controller
 
     }
 
+    public function getUsers(Request $request)
+    {
+
+        $data = DB::table('users')
+            ->select('id', 'name', 'email', 'role')->paginate(10);
+
+        return response($data, 200);
+    }
+
     public function logout(Request $request)
     {
 

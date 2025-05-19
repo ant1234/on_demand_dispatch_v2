@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import HomeView from '@/views/HomeView.vue';
 import LoginView from '@/views/auth/LoginView.vue';
 import SignUpView from '@/views/auth/SignUpView.vue';
-import DashboardView from '@/views/admin/DashboardView.vue';
+import DashboardView from '@/views/admin/AdminView.vue';
+import UsersView from '@/views/admin/users/UserView.vue';
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView,
+    children: [
+      {
+        path: '/users',
+        component: UsersView,
+      }],
   },
 ];
 
