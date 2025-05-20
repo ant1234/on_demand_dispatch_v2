@@ -5,7 +5,7 @@
           type="text"
           placeholder="Search..."
           class="border px-2 py-1 rounded"
-          v-model="searchQuery"
+          v-model="query"
         />
       </div>
     </div>
@@ -21,8 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in props.users" :key="user?.id">
-
+        <tr v-for="user in filteredUsers" :key="user?.id">
           <td class="border px-4 py-2">{{ user?.id }}</td>
           <td class="border px-4 py-2">{{ user?.name }}</td>
           <td class="border px-4 py-2">{{ user?.email }}</td>
@@ -42,6 +41,9 @@
             </button>
           </td>
         </tr>
+        <tr v-if="filteredUsers.length === 0">
+          <td colspan="5" class="text-center py-4">No users found.</td>
+        </tr>
       </tbody>
     </table>
   
@@ -53,7 +55,7 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   
   const props = defineProps({
     users: {
@@ -62,7 +64,15 @@
     },
   });
   
-  const searchQuery = ref('');
+  const query = ref('');
+  
+  // Filter users by name starting with query (case insensitive)
+  const filteredUsers = computed(() => {
+    if (!query.value) return props.users;
+    return props.users.filter(user =>
+      user.name.toLowerCase().startsWith(query.value.toLowerCase())
+    );
+  });
   
   const editUser = (userId) => {
     console.log(`Edit user with ID: ${userId}`);

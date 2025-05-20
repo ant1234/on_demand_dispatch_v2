@@ -24,7 +24,7 @@ Route::controller(AuthController::class)->group(function () {
 
     // get requests     
 
-    Route::post('/users', 'getUsers')
+    Route::get('/users', 'getUsers')
         ->name('users.getUsers');
 });
 

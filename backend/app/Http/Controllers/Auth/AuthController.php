@@ -74,9 +74,11 @@ class AuthController extends Controller
 
     public function getUsers(Request $request)
     {
-
+        $query = $request->query('query');
         $data = DB::table('users')
-            ->select('id', 'name', 'email', 'role')->paginate(10);
+            ->select('id', 'name', 'email', 'role')
+            ->where('name', 'LIKE', "%{$query}%")
+            ->paginate(10);
 
         return response($data, 200);
     }

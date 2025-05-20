@@ -40,7 +40,16 @@ export function setUserData(data) {
     user: data?.user,
     token: data?.token,
   }));
+}
 
+export function _debounce(cb, delay) {
+  let timer;
+  return function(...args) {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => cb(...args), delay); // ✅ spread args properly
+  };
 }
 
 
