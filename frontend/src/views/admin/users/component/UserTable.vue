@@ -4,7 +4,7 @@
         <input
           type="text"
           placeholder="Search..."
-          class="border px-2 py-1 rounded"
+          class="mb-2 border px-2 py-2 shadow-md rounded-md"
           v-model="query"
         />
       </div>
@@ -21,10 +21,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in filteredUsers" :key="user?.id">
-          <td class="border px-4 py-2">{{ user?.id }}</td>
+        <tr v-for="(user, index) in filteredUsers" :key="user?.id">
+          <td class="border px-4 py-2">{{ index + 1 }}</td>
           <td class="border px-4 py-2">{{ user?.name }}</td>
-          <td class="border px-4 py-2">{{ user?.email }}</td>
+          <td class="border px-4 py-2">
+            <a :href="'mailto:' + user?.email" class="text-indigo-700">
+                {{ user?.email }}
+            </a>
+          </td>
           <td class="border px-4 py-2">{{ user?.role }}</td>
           <td class="border px-4 py-2">
             <button
