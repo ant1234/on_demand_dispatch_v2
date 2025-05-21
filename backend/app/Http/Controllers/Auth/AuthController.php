@@ -13,7 +13,6 @@ use DB;
 
 class AuthController extends Controller
 {
-    //
     public function register(Request $request)
     {
         // Validate the request
@@ -22,9 +21,9 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required',
         ]);
-
+    
         $otp_code = User::generateOtp();
-
+    
         // Create the user
         $user = User::create([
             'name' => $request->name,
@@ -33,44 +32,51 @@ class AuthController extends Controller
             'is_valid_email' => User::IS_INVALID_EMAIL,
             'password' => bcrypt($request->password),
         ]);
-
+    
+        // Send OTP email
         SendEmailEvent::dispatch($user);
-
+    
+        // Generate Sanctum token
+        $token = $user->createToken('auth_token')->plainTextToken;
+    
         // Return a response
         return response()->json([
-            'message' => 'Your account has been registered successfully.', 
-            'user' => $user], 201);
+            'message' => 'Your account has been registered successfully.',
+            'user' => $user,
+            'token' => $token,
+            'isLogged' => true
+        ], 201);
     }
-
+    
     public function login(Request $request)
     {
         // Validate the request
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
-
-        // Create the user
+    
+        // Find the user
         $user = User::getUserByEmail($request->email);
-
+    
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'errors' => [
                     'message' => 'Email or password incorrect.',
-                    // 'isLogged' => false
                 ],
             ], 401);
         }
-
-
+    
+        // ✅ Generate Sanctum token
+        $token = $user->createToken('auth_token')->plainTextToken;
+    
         return response()->json([
             'message' => 'User logged in successfully.',
             'user' => $user,
-            'token' => $user->otp_code,
+            'token' => $token,
             'isLogged' => true
         ], 200);
-
-    }
+    }    
 
     public function getUsers(Request $request)
     {
@@ -117,10 +123,12 @@ class AuthController extends Controller
         $user->is_valid_email = User::IS_VALID_EMAIL;
         $user->save();
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
             'message' => 'Email verified successfully.',
             'user' => $user,
-            'token' => $user->otp_code,
+            'token' => $token,
         ], 200);
     }
 

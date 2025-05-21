@@ -8,6 +8,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
 Route::controller(AuthController::class)->group(function () {
 
     Route::post('/users', 'register')
@@ -16,17 +17,25 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login')
         ->name('users.login');
 
-    Route::post('/logout', 'logout')
-        ->name('users.logout');
-
     Route::post('/users/verify-email', 'validateUserEmail')
         ->name('users.validateUserEmail');
 
-    // get requests     
-
-    Route::get('/users', 'getUsers')
-        ->name('users.getUsers');
 });
+
+Route::group(['middleware' => 'auth:sanctum'], function() {
+
+    Route::controller(AuthController::class)->group(function () {
+
+        Route::post('/logout', 'logout')
+            ->name('users.logout');
+    
+        Route::get('/users', 'getUsers')
+            ->name('users.getUsers');
+    });
+
+});
+
+
 
 
 
