@@ -29,6 +29,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'otp_code' => $otp_code,
+            'role' => User::CUSTOMER_ROLE,
             'is_valid_email' => User::IS_INVALID_EMAIL,
             'password' => bcrypt($request->password),
         ]);

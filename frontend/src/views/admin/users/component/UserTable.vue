@@ -32,7 +32,7 @@
           <td class="border px-4 py-2">{{ user?.role }}</td>
           <td class="border px-4 py-2">
             <button
-              @click="editUser(user?.id)"
+              @click="emit('toggleModal', user?.id)"
               class="bg-blue-500 text-white px-2 py-1 rounded"
             >
               Edit
@@ -67,6 +67,8 @@
       default: () => [],
     },
   });
+
+  const emit = defineEmits('getUsers', 'toggleModal');
   
   const query = ref('');
   
@@ -77,10 +79,6 @@
       user.name.toLowerCase().startsWith(query.value.toLowerCase())
     );
   });
-  
-  const editUser = (userId) => {
-    console.log(`Edit user with ID: ${userId}`);
-  };
   
   const deleteUser = (userId) => {
     console.log(`Delete user with ID: ${userId}`);

@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
-import { getData } from '@/helper/http';
+import { getData, postData } from '@/helper/http';
+import { successMsg } from '@/helper/utils';
 
 
 export const useUserStore = defineStore('user', () => {
@@ -8,6 +9,31 @@ export const useUserStore = defineStore('user', () => {
     const userData = ref({});
 
     const loading = ref(false);
+
+    const modalVal = ref(false);
+
+    const roles = ref(['ADMIN', 'CUSTOMER', 'DRIVER']);
+
+    function toggleModal(userId) {
+        console.log(userId);
+        modalVal.value = !modalVal.value
+    }
+
+    async function modifyRole(role) {
+
+        try {
+            loading.value = true;
+            const data = await postData(`/users/modify-role`, {
+                role:role
+            });
+            successMsg(data?.message);
+            userData.value = data;
+            loading.value = false;
+        } catch (error) {
+            loading.value = false;
+            console.error('Error fetching user data:', error);
+        }
+    }
 
     async function getUsers(page = 1, query = '') {
 
@@ -25,6 +51,10 @@ export const useUserStore = defineStore('user', () => {
     return {
         userData,
         loading,
+        roles,
+        toggleModal,
+        modifyRole,
+        modalVal,
         getUsers,
     };
 
