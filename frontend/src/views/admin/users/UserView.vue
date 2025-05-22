@@ -44,7 +44,7 @@ import { TailwindPagination } from 'laravel-vue-pagination'
 import UserRoleModal from './component/UserRoleModal.vue';
 
 const userStore = useUserStore();
-const { userData, modalVal, toggleModal } = storeToRefs(userStore);
+const { userData, modalVal } = storeToRefs(userStore);
 
 onMounted(async () => {
     await userStore.getUsers();
