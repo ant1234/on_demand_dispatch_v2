@@ -14,9 +14,11 @@ export const useUserStore = defineStore('user', () => {
 
     const roles = ref(['ADMIN', 'CUSTOMER', 'DRIVER']);
 
-    function toggleModal(userId) {
-        console.log(userId);
-        modalVal.value = !modalVal.value
+    const userId = ref(null);
+
+    function toggleModal(id) {
+        modalVal.value = !modalVal.value;
+        userId.value = id;
     }
 
     async function modifyRole(role) {
@@ -24,11 +26,13 @@ export const useUserStore = defineStore('user', () => {
         try {
             loading.value = true;
             const data = await postData(`/users/modify-role`, {
-                role:role
+                role: role,
+                userId: userId.value, 
             });
             successMsg(data?.message);
             userData.value = data;
             loading.value = false;
+            getUsers();
         } catch (error) {
             loading.value = false;
             console.error('Error fetching user data:', error);

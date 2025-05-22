@@ -31,6 +31,10 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     
         Route::get('/users', 'getUsers')
             ->name('users.getUsers');
+
+        Route::post('/users/modify-role', 'updateRole')
+            ->name('users.updateRole');
+            
     });
 
 });
