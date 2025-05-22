@@ -3,11 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\VehicleController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-
 
 Route::controller(AuthController::class)->group(function () {
 
@@ -34,6 +35,22 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
         Route::post('/users/modify-role', 'updateRole')
             ->name('users.updateRole');
+
+    });
+
+    Route::controller(VehicleController::class)->group(function () {
+
+        Route::post('/vehicles', 'store')
+            ->name('vehicles.logout');
+
+        Route::post('/vehicles/image', 'addImage')
+            ->name('vehicles.addImage');
+    
+        Route::put('/vehicles/{id}', 'update')
+            ->name('vehicles.update');
+
+        Route::delete('/vehicles/{id}', 'destroy')
+            ->name('vehicles.destroy');
             
     });
 
