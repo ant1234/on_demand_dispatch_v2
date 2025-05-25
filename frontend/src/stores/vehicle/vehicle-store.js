@@ -2,7 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
 import { getData, postData } from '@/helper/http';
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, numeric } from '@vuelidate/validators'
 import { successMsg } from '@/helper/utils';
 
 
@@ -15,7 +15,7 @@ export const useVehicleStore = defineStore('vehicle', () => {
 
     const rules = {
         name: { required },
-        price: { required },
+        price: { required, numeric },
         model: { required },
     };
     
@@ -32,6 +32,8 @@ export const useVehicleStore = defineStore('vehicle', () => {
         try {
             loading.value = true;
             const data = await postData(`/vehicles`, { ...vehicleInput.value });
+            vehicleValidation$.value.$reset();
+            vehicleInput.value = {};
             successMsg(data?.message);
             loading.value = false;
         } catch (error) {

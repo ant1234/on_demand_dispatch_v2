@@ -38,7 +38,9 @@ const vehicleStore = useVehicleStore();
 const { vehicleData, modalVal } = storeToRefs(vehicleStore);
 
 onMounted(async () => {
-    // await userStore.getUsers();
+  await vehicleStore.getVehicles(); // <- this actually fetches data
+  console.log('vehicleData after fetch:', vehicleData.value);
 });
+
 </script>
 

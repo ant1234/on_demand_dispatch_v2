@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Events\SendEmailEvent;
 use DB;
 
+
 class AuthController extends Controller
 {
     public function register(Request $request)

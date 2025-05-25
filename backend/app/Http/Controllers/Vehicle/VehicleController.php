@@ -82,12 +82,11 @@ class VehicleController extends Controller
             'price' => 'required',
         ]);
 
-        $vehicle = Vehicle::update([
-            'id' => $request->id,
+        $vehicle = Vehicle::where('id', $request->id)->update([
             'name' => $request->name,
             'model' => $request->model,
             'price' => $request->price,
-        ])->where('id', '=', $request->id);
+        ]);
 
         return response()->json([
             'message' => 'Vehicle updated successfully.',
@@ -106,8 +105,8 @@ class VehicleController extends Controller
             'price' => 'required',
         ]);
 
-        Vehicle::delete()->where('id', '=', $request->id);
-
+        Vehicle::where('id', $request->id)->delete();
+        
         return response()->json([
             'message' => 'Vehicle removed successfully.'
         ], 200);

@@ -30,13 +30,13 @@
           <td class="border px-4 py-2">
             <button
               @click="emit('uploadImage', vehicle?.id)"
-              class="bg-blue-500 text-white px-2 py-1 rounded"
+              class="bg-blue-500 text-white px-2 py-1 mr-2 rounded"
             >
               Upload 
             </button>
             <button
               @click="emit('editVehicle', vehicle?.id)"
-              class="bg-blue-500 text-white px-2 py-1 rounded"
+              class="bg-blue-500 text-white px-2 py-1 mr-2 rounded"
             >
               Edit 
             </button>
@@ -59,6 +59,8 @@
   </template>
   
   <script setup>
+
+  defineProps(["vehicles"]);
 
   const emit = defineEmits(['editVehicle', 'uploadImage', 'removeVehicle', 'toggleModal']);
 
