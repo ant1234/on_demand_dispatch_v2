@@ -1,38 +1,48 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
-import { getData } from '@/helper/http';
+import { getData, postData } from '@/helper/http';
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+import { successMsg } from '@/helper/utils';
 
 
 export const useVehicleStore = defineStore('vehicle', () => {
 
     const vehicleData = ref({});
-
+    const vehicleInput = ref({name: "", model: "", price: ""});
     const loading = ref(false);
+    const modalVal = ref(false);
 
-    // const modalVal = ref(false);
+    const rules = {
+        name: { required },
+        price: { required },
+        model: { required },
+    };
+    
+    const vehicleValidation$ = useVuelidate(rules, vehicleInput);
+    
+    async function createVehicle() {
 
-    // function toggleModal(id) {
-    //     modalVal.value = !modalVal.value;
-    //     userId.value = id;
-    // }
+        const isValid = await vehicleValidation$.value.$validate();
 
-    // async function modifyRole(role) {
+        if (!isValid) {
+            return;
+        }
 
-    //     try {
-    //         loading.value = true;
-    //         const data = await postData(`/users/modify-role`, {
-    //             role: role,
-    //             userId: userId.value, 
-    //         });
-    //         successMsg(data?.message);
-    //         userData.value = data;
-    //         loading.value = false;
-    //         getUsers();
-    //     } catch (error) {
-    //         loading.value = false;
-    //         console.error('Error fetching user data:', error);
-    //     }
-    // }
+        try {
+            loading.value = true;
+            const data = await postData(`/vehicles`, { ...vehicleInput.value });
+            successMsg(data?.message);
+            loading.value = false;
+        } catch (error) {
+            loading.value = false;
+            console.error('Error fetching vehicle data:', error);
+        }
+    }
+
+    function toggleModal() {
+        modalVal.value = !modalVal.value;
+    }
 
     async function getVehicles() {
 
@@ -50,7 +60,12 @@ export const useVehicleStore = defineStore('vehicle', () => {
     return {
         vehicleData,
         loading,
+        modalVal,
+        vehicleInput,
+        vehicleValidation$,
         getVehicles,
+        toggleModal,
+        createVehicle,
     };
 
 });

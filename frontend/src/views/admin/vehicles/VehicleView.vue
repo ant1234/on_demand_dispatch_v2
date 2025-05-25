@@ -1,10 +1,18 @@
 <template>
     <div class="ml-4 mr-4">
 
-        <h1 class="text-2xl mb-4">Trucks Page</h1>
+        <h1 class="text-2xl mb-4">Trucks</h1>
 
+        <VehicleModal 
+            v-show="modalVal"
+            :show="modalVal" 
+            :loading="loading"
+            @toggleModal="vehicleStore.toggleModal" 
+            />
+        
         <VehicleTable 
-            :vehicles="vehicleData?.data" 
+            @toggleModal="vehicleStore.toggleModal"
+            :vehicles="vehicleData" 
         />
 
     </div>
@@ -23,10 +31,11 @@ button.relative.inline-flex.items-center.px-4.py-2.text-sm.font-medium.border.fo
 import VehicleTable from './components/VehicleTable.vue';
 import { onMounted } from 'vue';
 import { useVehicleStore } from '@/stores/vehicle/vehicle-store';
+import VehicleModal from './components/VehicleModal.vue';
 import { storeToRefs } from 'pinia';
 
 const vehicleStore = useVehicleStore();
-const { vehicleData } = storeToRefs(vehicleStore);
+const { vehicleData, modalVal } = storeToRefs(vehicleStore);
 
 onMounted(async () => {
     // await userStore.getUsers();

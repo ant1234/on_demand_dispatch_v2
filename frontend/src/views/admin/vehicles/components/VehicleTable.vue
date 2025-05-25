@@ -1,4 +1,12 @@
 <template>
+    <div class="flex justify-end p-2">
+      <button
+        @click="emit('toggleModal')"
+        class="bg-blue-500 text-white px-2 py-1 rounded"
+      >
+        Create
+      </button>
+    </div>
     <table class="w-full mt-4">
       <thead>
         <tr>
@@ -51,15 +59,8 @@
   </template>
   
   <script setup>
-  
-  // const props = defineProps({
-  //   vehicles: {
-  //     type: Array,
-  //     default: () => [],
-  //   },
-  // });
 
-  const emit = defineEmits(['editVehicle', 'uploadImage', 'removeVehicle']);
+  const emit = defineEmits(['editVehicle', 'uploadImage', 'removeVehicle', 'toggleModal']);
 
   const addVehicle = () => {
     console.log('add vehicle');
