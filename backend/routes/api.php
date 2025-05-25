@@ -23,7 +23,7 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
-Route::group(['middleware' => 'auth:sanctum'], function() {
+// Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::controller(AuthController::class)->group(function () {
 
@@ -43,18 +43,21 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('/vehicles', 'store')
             ->name('vehicles.logout');
 
+        Route::get('/vehicles', 'getVehicles')
+            ->name('vehicles.getVehicles');
+
         Route::post('/vehicles/image', 'addImage')
             ->name('vehicles.addImage');
     
-        Route::put('/vehicles/{id}', 'update')
+        Route::put('/vehicles', 'update')
             ->name('vehicles.update');
 
-        Route::delete('/vehicles/{id}', 'destroy')
+        Route::delete('/vehicles', 'destroy')
             ->name('vehicles.destroy');
             
     });
 
-});
+// });
 
 
 

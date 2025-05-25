@@ -27,8 +27,16 @@
                         <span v-show="toggleSideBar"> Payments</span>
                     </li>
                     <li class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
-                        <UsersIcon class="mt-1" />
-                        <span v-show="toggleSideBar"> Users</span>
+                        <RouterLink to="vehicles" class="flex">
+                            <TruckIcon class="mt-1" />
+                            <span v-show="toggleSideBar" class="ml-2">Vehicles</span>
+                        </RouterLink>
+                    </li>
+                    <li class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
+                        <RouterLink to="users" class="flex">
+                            <UsersIcon class="mt-1" />
+                            <span v-show="toggleSideBar" class="ml-2">Users</span>
+                        </RouterLink>
                     </li>
                     <li @click="loginStore.logout" class="flex text-red-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
                         <LogoutIcon class="mt-1" />
@@ -76,6 +84,7 @@ import ChevronIconRight from '@/components/icons/ChevronIconRight.vue';
 import { ref } from 'vue';
 import { getUserData } from '@/helper/utils';
 import { useLoginStore } from '@/stores/auth/login-store';
+import { RouterLink } from 'vue-router';
 
 const loginStore = useLoginStore();
 

@@ -68,7 +68,7 @@
     },
   });
 
-  const emit = defineEmits('getUsers', 'toggleModal');
+  const emit = defineEmits(['getUsers', 'toggleModal']);
   
   const query = ref('');
   

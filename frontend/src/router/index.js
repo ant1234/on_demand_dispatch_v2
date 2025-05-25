@@ -5,6 +5,7 @@ import LoginView from '@/views/auth/LoginView.vue';
 import SignUpView from '@/views/auth/SignUpView.vue';
 import DashboardView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/users/UserView.vue';
+import VehicleView from '@/views/admin/vehicles/VehicleView.vue';
 
 const routes = [
   {
@@ -25,7 +26,12 @@ const routes = [
       {
         path: '/users',
         component: UsersView,
-      }],
+      },
+      {
+        path: '/vehicles',
+        component: VehicleView,
+      }
+    ],
   },
 ];
 
