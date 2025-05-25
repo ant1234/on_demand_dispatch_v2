@@ -12,6 +12,7 @@
         
         <VehicleTable 
             @toggleModal="vehicleStore.toggleModal"
+            @editVehicle="editVehicle"
             :vehicles="vehicleData" 
         />
 
@@ -35,7 +36,13 @@ import VehicleModal from './components/VehicleModal.vue';
 import { storeToRefs } from 'pinia';
 
 const vehicleStore = useVehicleStore();
-const { vehicleData, modalVal } = storeToRefs(vehicleStore);
+const { vehicleData, modalVal, edit, vehicleInput } = storeToRefs(vehicleStore);
+
+function editVehicle(vehicle) {
+    vehicleInput.value = vehicle;
+    modalVal.value = true;
+    edit.value = true;
+}
 
 onMounted(async () => {
   await vehicleStore.getVehicles(); // <- this actually fetches data

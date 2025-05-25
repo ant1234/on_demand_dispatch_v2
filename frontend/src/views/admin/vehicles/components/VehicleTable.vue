@@ -2,7 +2,7 @@
     <div class="flex justify-end p-2">
       <button
         @click="emit('toggleModal')"
-        class="bg-blue-500 text-white px-2 py-1 rounded"
+        class="text-white px-2 py-1 rounded-md border bg-indigo-700 font-semibold hover:bg-indigo-500 hover:text-white"
       >
         Create
       </button>
@@ -29,33 +29,22 @@
           <td class="border px-4 py-2">{{ vehicle?.image }}</td>
           <td class="border px-4 py-2">
             <button
-              @click="emit('uploadImage', vehicle?.id)"
-              class="bg-blue-500 text-white px-2 py-1 mr-2 rounded"
+                class="text-indigo-600 px-2 py-1 mr-1 rounded-md border border-indigo-700 font-semibold hover:bg-indigo-500 hover:text-white"
+                @click="emit('editVehicle', vehicle)"
+                href="#"
+                >Edit</button
             >
-              Upload 
-            </button>
             <button
-              @click="emit('editVehicle', vehicle?.id)"
-              class="bg-blue-500 text-white px-2 py-1 mr-2 rounded"
+                class="text-gray-700 px-2 py-1 mr-1 rounded-md border border-red-700 font-semibold hover:bg-red-500 hover:text-white"
+                href="#"
+                @click="emit('removeVehicle', vehicle?.id)"
+                >Delete</button
             >
-              Edit 
-            </button>
-            <button
-              @click="emit('removeVehicle', vehicle?.id)"
-              class="bg-blue-500 text-white px-2 py-1 rounded"
-            >
-              Remove 
-            </button>
           </td>
         </tr>
       </tbody>
     </table>
   
-    <div class="mt-4">
-      <button @click="addVehicle" class="bg-green-500 text-white px-4 py-2 rounded">
-        Add Vehicle
-      </button>
-    </div>
   </template>
   
   <script setup>
@@ -63,11 +52,6 @@
   defineProps(["vehicles"]);
 
   const emit = defineEmits(['editVehicle', 'uploadImage', 'removeVehicle', 'toggleModal']);
-
-  const addVehicle = () => {
-    console.log('add vehicle');
-  }
-
 
   </script>
   

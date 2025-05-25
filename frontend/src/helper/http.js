@@ -49,7 +49,35 @@ export function postData(endpoint, input) {
   });
 }
 
+export function putData(endpoint, input) {
 
+  const header = getHeaders();
+
+  return new Promise((resolve, reject) => {
+    // Wrapping the async logic inside an async IIFE (Immediately Invoked Function Expression)
+    (async () => {
+      try {
+        const res = await fetch(App.apiBaseUrl + endpoint, {
+          method: 'PUT',
+          headers: header,
+          body: JSON.stringify(input),
+        });
+
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await res.json();
+
+        handleHttpError(responseData, resolve, reject);
+
+      } catch (error) {
+        console.error('Error:', error);
+        reject(error);
+      }
+    })();
+  });
+}
 
 export function getData(endpoint) {
 

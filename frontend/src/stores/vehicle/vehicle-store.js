@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
-import { getData, postData } from '@/helper/http';
+import { getData, postData, putData } from '@/helper/http';
 import { useVuelidate } from '@vuelidate/core'
 import { required, numeric } from '@vuelidate/validators'
 import { successMsg } from '@/helper/utils';
@@ -12,6 +12,7 @@ export const useVehicleStore = defineStore('vehicle', () => {
     const vehicleInput = ref({name: "", model: "", price: ""});
     const loading = ref(false);
     const modalVal = ref(false);
+    const edit = ref(false);
 
     const rules = {
         name: { required },
@@ -21,7 +22,7 @@ export const useVehicleStore = defineStore('vehicle', () => {
     
     const vehicleValidation$ = useVuelidate(rules, vehicleInput);
     
-    async function createVehicle() {
+    async function createOrUpdateVehicle() {
 
         const isValid = await vehicleValidation$.value.$validate();
 
@@ -31,7 +32,9 @@ export const useVehicleStore = defineStore('vehicle', () => {
 
         try {
             loading.value = true;
-            const data = await postData(`/vehicles`, { ...vehicleInput.value });
+            const data = edit.value ? 
+                        await putData(`/vehicles`, { ...vehicleInput.value })
+                        : await postData(`/vehicles`, { ...vehicleInput.value });
             vehicleValidation$.value.$reset();
             vehicleInput.value = {};
             successMsg(data?.message);
@@ -61,13 +64,14 @@ export const useVehicleStore = defineStore('vehicle', () => {
 
     return {
         vehicleData,
+        edit,
         loading,
         modalVal,
         vehicleInput,
         vehicleValidation$,
         getVehicles,
         toggleModal,
-        createVehicle,
+        createOrUpdateVehicle,
     };
 
 });
