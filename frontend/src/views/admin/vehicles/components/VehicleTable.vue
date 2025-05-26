@@ -26,7 +26,14 @@
           <td class="border px-4 py-2">{{ vehicle?.name }}</td>
           <td class="border px-4 py-2">{{ vehicle?.model }}</td>
           <td class="border px-4 py-2">{{ vehicle?.price }}</td>
-          <td class="border px-4 py-2">{{ vehicle?.image }}</td>
+          <td class="border px-4 py-2">
+            <a
+                        class="text-indigo-600 px-2 py-1 rounded-md border border-indigo-700 font-semibold hover:bg-indigo-500 hover:text-white"
+                        @click="emit('uploadImage', vehicle?.id)"
+                        href="#"
+                        >Upload-Image</a
+                    >
+          </td>
           <td class="border px-4 py-2">
             <button
                 class="text-indigo-600 px-2 py-1 mr-1 rounded-md border border-indigo-700 font-semibold hover:bg-indigo-500 hover:text-white"
@@ -48,9 +55,8 @@
   </template>
   
   <script setup>
-  
-  defineProps(["vehicles"]);
 
+  defineProps(["vehicles"]);
   const emit = defineEmits(['editVehicle', 'uploadImage', 'removeVehicle', 'toggleModal']);
 
   </script>

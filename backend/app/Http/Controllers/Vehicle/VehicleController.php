@@ -23,32 +23,30 @@ class VehicleController extends Controller
     }
 
     public function addImage(Request $request) {
-
         // Validate the request
         $request->validate([
-            'id' => 'required',
+            'id' => 'required|integer|exists:vehicles,id',
             'image' => 'required|image|max:2043',
         ]);
-
-        if($request->hasFile('image')) {
+    
+        if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $input['file'] = time() . '.' . $image->getClientOriginalExtension();
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+    
+            Storage::disk('public')->put('images/' . $filename, file_get_contents($image));
+    
+            $imageURL = url('/') . '/storage/images/' . $filename;
+    
+            Vehicle::where('id', $request->id)->update([
+                'image' => $imageURL,
+            ]);
         }
-
-        Storage::disk('public')
-        ->put('images/' . $input['file'], file_get_contents($image));
-
-        $imageURL = url('/') . '/storage/images/' . $input['file'];
-
-        Vehicle::update([
-            'image' => $imageUrl,
-        ])->where('id', '=', $request->id);
-
+    
         return response()->json([
             'message' => 'Vehicle image uploaded successfully.'
         ], 200);
-        
     }
+    
 
     public function store(Request $request) {
 
