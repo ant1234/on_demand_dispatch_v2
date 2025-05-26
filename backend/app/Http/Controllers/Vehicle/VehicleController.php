@@ -100,13 +100,10 @@ class VehicleController extends Controller
         // Validate the request
         $request->validate([
             'id' => 'required',
-            'name' => 'required',
-            'model' => 'required',
-            'price' => 'required',
         ]);
 
         Vehicle::where('id', $request->id)->delete();
-        
+
         return response()->json([
             'message' => 'Vehicle removed successfully.'
         ], 200);

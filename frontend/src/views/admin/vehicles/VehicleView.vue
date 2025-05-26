@@ -13,6 +13,7 @@
         <VehicleTable 
             @toggleModal="vehicleStore.toggleModal"
             @editVehicle="editVehicle"
+            @removeVehicle="removeVehicle"
             :vehicles="vehicleData" 
         />
 
@@ -34,6 +35,7 @@ import { onMounted } from 'vue';
 import { useVehicleStore } from '@/stores/vehicle/vehicle-store';
 import VehicleModal from './components/VehicleModal.vue';
 import { storeToRefs } from 'pinia';
+import { promptUser } from "../../../helper/utils";
 
 const vehicleStore = useVehicleStore();
 const { vehicleData, modalVal, edit, vehicleInput } = storeToRefs(vehicleStore);
@@ -42,6 +44,13 @@ function editVehicle(vehicle) {
     vehicleInput.value = vehicle;
     modalVal.value = true;
     edit.value = true;
+}
+
+function removeVehicle(id) {
+    promptUser().then(async () => {
+        await vehicleStore.deleteVehicle(id);
+        vehicleStore.getVehicles();
+    });
 }
 
 onMounted(async () => {

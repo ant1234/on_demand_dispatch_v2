@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
-import { getData, postData, putData } from '@/helper/http';
+import { getData, postData, putData, deleteData } from '@/helper/http';
 import { useVuelidate } from '@vuelidate/core'
 import { required, numeric } from '@vuelidate/validators'
 import { successMsg } from '@/helper/utils';
@@ -33,10 +33,9 @@ export const useVehicleStore = defineStore('vehicle', () => {
         try {
             loading.value = true;
             const data = edit.value ? 
-                        await putData(`/vehicles`, { ...vehicleInput.value })
-                        : await postData(`/vehicles`, { ...vehicleInput.value });
+                         editVehicle
+                        : createVehicle();
             vehicleValidation$.value.$reset();
-            vehicleInput.value = {};
             successMsg(data?.message);
             loading.value = false;
         } catch (error) {
@@ -62,6 +61,32 @@ export const useVehicleStore = defineStore('vehicle', () => {
         }
     }
 
+    async function editVehicle() {
+        await putData(`/vehicles`, {...vehicleInput.value});
+        modalVal.value = false;
+        edit.value = false;
+        vehicleInput.value = {};
+    }
+
+    async function createVehicle() {
+        await postData(`/vehicles`, {...vehicleInput.value});
+        vehicleInput.value = {};
+        edit.value = false;
+    }
+
+    async function deleteVehicle(id) {
+      
+        try {
+            loading.value = true;
+        const data= await deleteData(`/vehicles`,{id: id});
+           successMsg(data?.message)
+           loading.value = false;
+        } catch (err) {
+            loading.value = false;
+            console.error('Error fetching vehicle data:', err);
+        }
+    }
+
     return {
         vehicleData,
         edit,
@@ -69,6 +94,9 @@ export const useVehicleStore = defineStore('vehicle', () => {
         modalVal,
         vehicleInput,
         vehicleValidation$,
+        deleteVehicle,
+        editVehicle,
+        createVehicle,
         getVehicles,
         toggleModal,
         createOrUpdateVehicle,

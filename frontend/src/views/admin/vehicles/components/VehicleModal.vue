@@ -44,22 +44,20 @@
             :disabled="loading"
             class="mb-2 text-white border bg-indigo-700 py-2 px-2 rounded-md shadow-sm"
             >
-            {{loading?"saving...":"Save"}}
+            {{loading ? "saving...": saveButtonLabel }}
             </button>
         </template>
     </BaseModal>
 </template>
 
 <script setup>
+    import { ref } from 'vue';
     import { useVehicleStore } from '../../../../stores/vehicle/vehicle-store';
     import { storeToRefs } from 'pinia';
-
-   
-
     const vehicleStore = useVehicleStore();
-    const { vehicleValidation$, vehicleInput } = storeToRefs(vehicleStore);
+    const { vehicleValidation$, vehicleInput, loading, edit } = storeToRefs(vehicleStore);
+    const saveButtonLabel = ref(edit ? 'Update' : 'Save');
     const props = defineProps(['loading', 'show']);
     const emit = defineEmits(["toggleModal"]);
 
-    console.log();
 </script>

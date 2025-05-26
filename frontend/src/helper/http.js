@@ -108,6 +108,29 @@ export function getData(endpoint) {
   });
 }
 
+export async function deleteData(endpoint, input) {
+  const headers = getHeaders();
+
+      const res = await fetch(App.apiBaseUrl + endpoint, {
+          headers: headers,
+          method: "DELETE",
+          body: JSON.stringify(input),
+      });
+
+      // Handle 204 No Content edge case
+      if (res.status === 200) {
+          return { message: "Deleted successfully" };
+      }
+
+      const data = await res.json();
+
+      // Assuming handleHttpError throws if there's an error
+      handleHttpError(data);
+
+      return data;
+}
+
+
 export function handleHttpError(responseData, resolve, reject) {
 
   if (typeof responseData?.errors !== 'undefined') {

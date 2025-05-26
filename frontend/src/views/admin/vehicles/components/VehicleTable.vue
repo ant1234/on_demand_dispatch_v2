@@ -48,7 +48,7 @@
   </template>
   
   <script setup>
-
+  
   defineProps(["vehicles"]);
 
   const emit = defineEmits(['editVehicle', 'uploadImage', 'removeVehicle', 'toggleModal']);
