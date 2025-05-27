@@ -10,7 +10,7 @@
         </template>
         <template #footer>
             <button
-            @click="emit('toggleModal')"
+                @click="modalVal=false"
                 class="mb-2 text-gray-700 border border-indigo-700 py-2 px-2 rounded-md shadow-sm"
             >
                 close
@@ -55,7 +55,7 @@
             document.querySelector("#outputImage").src = "";            
             loading.value = false;
             modalVal.value=false
-           await emit('getVehicles')
+            await emit('getVehicles')
 
         })
         .catch((error) => {
@@ -65,6 +65,5 @@
     }
 
     const props = defineProps(['show', 'loading']);
-    const emit = defineEmits(["toggleModal"]);
-
+    const emit = defineEmits(['getVehicles'])
 </script>
