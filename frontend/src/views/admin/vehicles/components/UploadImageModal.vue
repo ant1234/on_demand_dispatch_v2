@@ -52,9 +52,7 @@
     fetch(App.apiBaseUrl + "/vehicles/image", payload)
         .then((response) => response.json())
         .then(async() => {
-            document.querySelector("#outputImage").src = "";
-            document.querySelector('#imageInput').value=''
-            
+            document.querySelector("#outputImage").src = "";            
             loading.value = false;
             modalVal.value=false
            await emit('getVehicles')
