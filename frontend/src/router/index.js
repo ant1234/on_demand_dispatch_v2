@@ -6,6 +6,7 @@ import SignUpView from '@/views/auth/SignUpView.vue';
 import DashboardView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/users/UserView.vue';
 import VehicleView from '@/views/admin/vehicles/VehicleView.vue';
+import WelcomeView from '@/views/admin/welcome/WelcomeView.vue';
 
 const routes = [
   {
@@ -30,6 +31,10 @@ const routes = [
       {
         path: '/vehicles',
         component: VehicleView,
+      },
+      {
+        path: '/welcome',
+        component: WelcomeView,
       }
     ],
   },

@@ -61,19 +61,22 @@ export const useVehicleStore = defineStore('vehicle', () => {
         }
     }
 
-    async function editVehicle() {
-        await putData(`/vehicles`, {...vehicleInput.value});
-        modalVal.value = false;
-        edit.value = false;
-        vehicleInput.value = {};
-    }
-
-    async function createVehicle() {
-        await postData(`/vehicles`, {...vehicleInput.value});
-        vehicleInput.value = {};
-        edit.value = false;
-    }
-
+    async function editVehicle(){
+        const data= await putData(`/vehicles`,{...vehicleInput.value})
+         modalVal.value=false
+         edit.value=false
+         vehicleInput.value={}
+         getVehicles
+         return data
+     }
+ 
+     async function createVehicle(){
+         const data=await postData(`/vehicles`,{...vehicleInput.value});
+         vehicleInput.value={}
+         edit.value=false
+         getVehicles()
+         return data
+     }
     async function deleteVehicle(id) {
       
         try {

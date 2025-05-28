@@ -6,6 +6,7 @@
         <UploadImageModal 
             v-show="uploadImageVehicleModal"
             :show="uploadImageVehicleModal"
+            @getVehicles="vehicleStore.getVehicles"
         />
 
         <VehicleModal 

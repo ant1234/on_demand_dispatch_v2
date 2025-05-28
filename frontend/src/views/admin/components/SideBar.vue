@@ -18,22 +18,26 @@
                     </button>
                 </div>
                 <ul class="flex flex-col p-2 gap-2">
-                    <li class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
-                        <HomeIcon class="mt-1" />
-                        <span v-show="toggleSideBar"> Home</span>
+                    <li>
+                        <RouterLink to="welcome" class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
+                            <HomeIcon class="mt-1" />
+                            <span v-show="toggleSideBar">Home</span>
+                        </RouterLink>
                     </li>
-                    <li class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
-                        <PaymentIcon class="mt-1" />   
-                        <span v-show="toggleSideBar"> Payments</span>
+                    <li>
+                        <RouterLink to="payments" class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
+                            <PaymentIcon class="mt-1" />   
+                            <span v-show="toggleSideBar">Payments</span>
+                        </RouterLink>
                     </li>
-                    <li class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
-                        <RouterLink to="vehicles" class="flex">
+                    <li>
+                        <RouterLink to="vehicles" class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
                             <TruckIcon class="mt-1" />
                             <span v-show="toggleSideBar" class="ml-2">Vehicles</span>
                         </RouterLink>
                     </li>
-                    <li class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
-                        <RouterLink to="users" class="flex">
+                    <li>
+                        <RouterLink to="users" class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
                             <UsersIcon class="mt-1" />
                             <span v-show="toggleSideBar" class="ml-2">Users</span>
                         </RouterLink>

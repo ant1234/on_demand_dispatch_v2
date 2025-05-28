@@ -6,7 +6,7 @@
         <template #body>
             <img style="height: 150px;" alt="Image" id="outputImage"/>
             <label for="">Select image</label>
-            <input type="file" @change="selectImage" />
+            <input type="file" id="imageInput" @change="selectImage" />
         </template>
         <template #footer>
             <button
@@ -52,9 +52,10 @@
     fetch(App.apiBaseUrl + "/vehicles/image", payload)
         .then((response) => response.json())
         .then(async() => {
-            document.querySelector("#outputImage").src = "";            
+            document.querySelector("#outputImage").src = "";  
+            document.querySelector("#imageInput").value = "";           
             loading.value = false;
-            modalVal.value=false
+            modalVal.value = false;
             await emit('getVehicles')
 
         })
