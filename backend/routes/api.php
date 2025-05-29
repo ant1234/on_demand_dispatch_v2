@@ -23,6 +23,15 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
+Route::controller(PlaceController::class)->group(function () {
+
+    Route::get('/places', 'fetchPlaces')
+        ->name('places.fetchPlaces');
+
+});
+
+
+
 // Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::controller(AuthController::class)->group(function () {
