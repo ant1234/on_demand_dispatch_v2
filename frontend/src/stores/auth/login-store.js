@@ -64,7 +64,7 @@ export const useLoginStore = defineStore('login', () => {
 
       setUserData(data);
 
-      window.location.href = '/app/dashboard';
+      window.location.href = '/app/welcome';
 
       successMsg(data?.message);
 

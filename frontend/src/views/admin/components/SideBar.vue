@@ -37,7 +37,7 @@
                         </RouterLink>
                     </li>
                     <li>
-                        <RouterLink to="users" class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
+                        <RouterLink v-show="userData?.user?.role === ADMIN_ROLE" to="users" class="flex text-black-600 hover:bg-slate-200 cursor-pointer gap-2 px-2 py-2 rounded-md">
                             <UsersIcon class="mt-1" />
                             <span v-show="toggleSideBar" class="ml-2">Users</span>
                         </RouterLink>
@@ -67,7 +67,15 @@
                         {{ userData?.user.name }}
                         <br>
                         <a href="" class="text-indigo-600">{{ userData?.user.email }}</a>
+                        <br>
+                        <span class="text-indigo-600">Role : {{ userData?.user.role}}</span>
+                        <br>
+                        <RouterLink class="text-indigo-600 underline" to="profile">
+                            Profile
+                        </RouterLink>
                     </li>
+
+
                     <li @click="loginStore.logout" class="px-2 py-2 hover:bg-gray-100 cursor-pointer rounded-md text-red-600 font-semibold">
                         Logout
                     </li>
@@ -89,6 +97,7 @@ import { ref } from 'vue';
 import { getUserData } from '@/helper/utils';
 import { useLoginStore } from '@/stores/auth/login-store';
 import { RouterLink } from 'vue-router';
+import { ADMIN_ROLE } from "@/constants/roles";
 
 const loginStore = useLoginStore();
 

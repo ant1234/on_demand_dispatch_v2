@@ -7,6 +7,8 @@ import DashboardView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/users/UserView.vue';
 import VehicleView from '@/views/admin/vehicles/VehicleView.vue';
 import WelcomeView from '@/views/admin/welcome/WelcomeView.vue';
+import { isAdmin } from "@/middleware/isAdmin";
+import ProfileView from '@/views/admin/users/ProfileView.vue';
 
 const routes = [
   {
@@ -27,6 +29,7 @@ const routes = [
       {
         path: '/users',
         component: UsersView,
+        beforeEnter: isAdmin, 
       },
       {
         path: '/vehicles',
@@ -35,6 +38,10 @@ const routes = [
       {
         path: '/welcome',
         component: WelcomeView,
+      },
+      {
+        path: '/profile',
+        component: ProfileView,
       }
     ],
   },
