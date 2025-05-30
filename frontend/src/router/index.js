@@ -9,6 +9,7 @@ import VehicleView from '@/views/admin/vehicles/VehicleView.vue';
 import WelcomeView from '@/views/admin/welcome/WelcomeView.vue';
 import { isAdmin } from "@/middleware/isAdmin";
 import ProfileView from '@/views/admin/users/ProfileView.vue';
+import MapView from '@/views/admin/map/MapView.vue';
 
 const routes = [
   {
@@ -42,6 +43,10 @@ const routes = [
       {
         path: '/profile',
         component: ProfileView,
+      },
+      {
+        path: '/map',
+        component: MapView,
       }
     ],
   },

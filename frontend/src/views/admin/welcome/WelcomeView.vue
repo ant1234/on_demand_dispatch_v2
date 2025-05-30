@@ -20,8 +20,12 @@
                     </select>
                 </div>
                 <div class="flex gap-2 mb-2">
-                    <AutoCompleteInput />
-                    <input type="text" placeholder="Enter Pickup Location" class="mb-2 border rounded-md py-2 px-2 w-[100%]" />
+                    <AutoCompleteInput 
+                        :placeholder="'Enter Pickup Location'"
+                    />
+                    <AutoCompleteInput 
+                        :placeholder="'Enter Drop Location'"
+                    />
                 </div>
                 <button
                     @click="bookTaxi"

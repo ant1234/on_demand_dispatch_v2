@@ -10,7 +10,7 @@
                 @blur="hideSuggestions"
                 @keydown="search"
                 type="text" 
-                placeholder="Enter Drop Location" 
+                :placeholder="props.placeholder" 
                 class="mb-2 border rounded-md focus:ring focus:ring-blue-200 py-2 px-7 w-[100%]" />
         </div>
         <ul v-show="showSuggestions" class="w-full rounded-md shadow-lg z-10 bg-white border border-gray-200 max-h-48 absolute overflow-y-auto">
@@ -34,6 +34,8 @@ const showSuggestions = ref(false);
 const vehicleStore = useVehicleStore();
 const { places } = storeToRefs(vehicleStore);
 const query = ref('');
+
+const props = defineProps(['placeholder']);
 
 const search = _debounce(async () => {
         await vehicleStore.getPlaces(query.value);
