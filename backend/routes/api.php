@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Vehicle\VehicleController;
+use App\Http\Controllers\mapbox\PlaceController;
 
 
 Route::get('/user', function (Request $request) {

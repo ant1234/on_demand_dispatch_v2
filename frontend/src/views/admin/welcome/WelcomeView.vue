@@ -20,7 +20,7 @@
                     </select>
                 </div>
                 <div class="flex gap-2 mb-2">
-                    <input type="text" placeholder="Enter Drop Location" class="mb-2 border rounded-md py-2 px-2 w-[100%]" />
+                    <AutoCompleteInput />
                     <input type="text" placeholder="Enter Pickup Location" class="mb-2 border rounded-md py-2 px-2 w-[100%]" />
                 </div>
                 <button
@@ -58,5 +58,6 @@
 
 <script setup>
 // import { App } from "@/api/api.js";
+import AutoCompleteInput from './components/AutoCompleteInput.vue';
 
 </script>

@@ -13,6 +13,7 @@ export const useVehicleStore = defineStore('vehicle', () => {
     const loading = ref(false);
     const modalVal = ref(false);
     const edit = ref(false);
+    const places = ref({});
 
     const rules = {
         name: { required },
@@ -61,6 +62,19 @@ export const useVehicleStore = defineStore('vehicle', () => {
         }
     }
 
+    async function getPlaces(query="") {
+
+        try {
+            loading.value = true;
+            const data = await getData(`/places?query=${query}`);
+            places.value = data?.features;
+            loading.value = false;
+        } catch (error) {
+            loading.value = false;
+            console.error('Error fetching map data:', error);
+        }
+    }
+
     async function editVehicle(){
         const data= await putData(`/vehicles`,{...vehicleInput.value})
          modalVal.value=false
@@ -97,6 +111,8 @@ export const useVehicleStore = defineStore('vehicle', () => {
         modalVal,
         vehicleInput,
         vehicleValidation$,
+        places,
+        getPlaces,
         deleteVehicle,
         editVehicle,
         createVehicle,
