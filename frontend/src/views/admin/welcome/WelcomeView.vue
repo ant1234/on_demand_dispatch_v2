@@ -38,23 +38,10 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 p-2 gap-2">
-            <div class="flex flex-col shadow-md" v-for="car in [1,2,3,4,5]" :key="car">
-                <div align="center">
-                    <img src="@/assets/taxi/cab_booking1.png" alt="Booking" />
-                    <div>
-                        <span>Tesla Model Y</span>
-                    </div>
-                    <div>
-                        <span>$12 / Km</span>
-                    </div>
-                </div>
-                <div class="flex justify-center p-2 mb-2">
-                    <button class="rounded-md gap-2 flex border border-indigo-700 text-gray-800 px-2 py-2 hover:bg-indigo-700 hover:text-white font-semibold text-sm">
-                        <span class="text-xl text-gray-700">Book Now</span>
-                        <ArrowRightIcon />
-                    </button>
-                </div>
-            </div>
+            <VehicleList 
+                :vehicles="vehicleData" 
+                hideBookButton
+            />
         </div>
     </div>
 </template>
@@ -63,5 +50,15 @@
 <script setup>
 // import { App } from "@/api/api.js";
 import AutoCompleteInput from './components/AutoCompleteInput.vue';
+import { useVehicleStore } from '@/stores/vehicle/vehicle-store';
+import { storeToRefs } from 'pinia';
+import { onMounted} from 'vue';
+import VehicleList from './components/VehicleList.vue';
 
+const vehicleStore = useVehicleStore();
+const { vehicleData } = storeToRefs(vehicleStore);
+
+onMounted(async () => {
+    await vehicleStore.getVehicles();
+});
 </script>
