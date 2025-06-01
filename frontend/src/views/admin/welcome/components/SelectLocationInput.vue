@@ -5,15 +5,18 @@
                 <MapPinIcon class="" />
             </span>
             <input 
-                v-model="query"
-                @focus="showSuggestions = true"
+                v-model="queryLocation"
+                @focus="showSuggestionsLocation = true"
                 @blur="hideSuggestions"
                 @keydown="search"
                 type="text" 
-                :placeholder="props.placeholder" 
+                :placeholder="placeholder" 
                 class="mb-2 border rounded-md focus:ring focus:ring-blue-200 py-2 px-7 w-[100%]" />
+            <span v-show="loading" class="absolute top-1 right-2">
+                <img src="@/assets/spinner.gif" width="30" alt="spinner" />        
+            </span>
         </div>
-        <ul v-show="showSuggestions" class="w-full rounded-md shadow-lg z-10 bg-white border border-gray-200 max-h-48 absolute overflow-y-auto">
+        <ul v-show="showSuggestionsLocation" class="w-full rounded-md shadow-lg z-10 bg-white border border-gray-200 max-h-48 absolute overflow-y-auto">
             <li v-for="place in places" 
                 :key="place?.place_name" 
                 @click="selectPlace(place)"
@@ -25,25 +28,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+// import { ref } from 'vue';
 import  { storeToRefs } from 'pinia';
 import { useVehicleStore } from '@/stores/vehicle/vehicle-store';
 import { _debounce } from '@/helper/utils';
+import { useAutoCompleteStore } from '@/stores/vehicle/auto-complete-store';
 
-const showSuggestions = ref(false);
+const autoCompleteStore = useAutoCompleteStore();
+const { queryLocation, showSuggestionsLocation } = storeToRefs(autoCompleteStore);
+
 const vehicleStore = useVehicleStore();
-const { places } = storeToRefs(vehicleStore);
-const query = ref('');
+const { places, loading } = storeToRefs(vehicleStore);
 
-const props = defineProps(['placeholder']);
+defineProps(['placeholder']);
+defineEmits(['selectPlace']);
 
 const search = _debounce(async () => {
-        await vehicleStore.getPlaces(query.value);
+        await vehicleStore.getPlaces(queryLocation.value);
 }, 500);
 
 function hideSuggestions() {
     setTimeout(() => {
-        showSuggestions.value = false;
+        showSuggestionsLocation.value = false;
     }, 100);
 }
 </script>

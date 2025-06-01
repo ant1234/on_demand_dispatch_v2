@@ -14,24 +14,30 @@
                 <div class="flex flex-col mb-2">
                     <select name="" id="" class="mb-2 border rounded-md py-2 px-2 w-[100%]">
                         <option value="">Select Taxi</option>
-                        <option value="">New York</option>
-                        <option value="">Los Angeles</option>
-                        <option value="">Chicago</option>
+                        <option 
+                            v-for="vehicle in vehicleData" 
+                            :key="vehicle?.id" :value="vehicle?.id">{{ vehicle?.name}} - {{ vehicle?.model }}</option>
                     </select>
                 </div>
                 <div class="flex gap-2 mb-2">
-                    <AutoCompleteInput 
+                    <SelectLocationInput 
+                        @selectPlace="selectLocation"
+                        v-model="location"
+                        :places="vehicleStore.places"
                         :placeholder="'Enter Pickup Location'"
                     />
-                    <AutoCompleteInput 
+                    <SelectDestinationInput 
+                        @selectPlace="selectDestination"
+                        v-model="destination"
+                        :places="vehicleStore.places"
                         :placeholder="'Enter Drop Location'"
                     />
                 </div>
                 <button
-                    @click="bookTaxi"
+                    @click="bookDriver"
                     class="flex justify-center font-semibold rounded-md bg-indigo-700 text-white px-2 py-2 w-[100%]"
                 >
-                    <span class="">Book taxi now</span>
+                    <span class="">Book driver now</span>
                     <ArrowRightIcon class="pt-1" />
                 </button>
             </div>
@@ -49,14 +55,54 @@
 
 <script setup>
 // import { App } from "@/api/api.js";
-import AutoCompleteInput from './components/AutoCompleteInput.vue';
+import SelectLocationInput from './components/SelectLocationInput.vue';
+import SelectDestinationInput from './components/SelectDestinationInput.vue';
+
 import { useVehicleStore } from '@/stores/vehicle/vehicle-store';
+import { useAutoCompleteStore } from '@/stores/vehicle/auto-complete-store';
 import { storeToRefs } from 'pinia';
 import { onMounted} from 'vue';
 import VehicleList from './components/VehicleList.vue';
+import { useMapStore } from '@/stores/map/map-store';
+import { useRouter } from 'vue-router';
+
+const autoCompleteStore = useAutoCompleteStore();
+const { showSuggestionsLocation, 
+        showSuggestionsDestination,
+        queryDestination,
+        queryLocation
+      } = storeToRefs(autoCompleteStore);
 
 const vehicleStore = useVehicleStore();
+const mapStore = useMapStore();
 const { vehicleData } = storeToRefs(vehicleStore);
+const { destination, location } = storeToRefs(mapStore);
+
+function selectLocation(place) {
+    if (place?.geometry?.coordinates) {
+        location.value = place?.geometry?.coordinates;
+        showSuggestionsLocation.value = false;
+        queryLocation.value = place?.place_name;
+    }
+}
+
+function selectDestination(place) {
+    if (place?.geometry?.coordinates) {
+        destination.value = place?.geometry?.coordinates;
+        showSuggestionsDestination.value = false;
+        queryDestination.value = place?.place_name;
+    }
+}
+
+const Router = useRouter();
+
+function bookDriver() {
+    if (!location.value || !destination.value) {
+        alert('Please select both pickup and drop locations.');
+        return;
+    }
+    Router.push('/map');
+}
 
 onMounted(async () => {
     await vehicleStore.getVehicles();
