@@ -21,17 +21,19 @@
                 </div>
                 <div class="flex gap-2 mb-2">
                     <SelectLocationInput 
-                        @selectPlace="selectLocation"
-                        v-model="location"
-                        :places="vehicleStore.places"
-                        :placeholder="'Enter Pickup Location'"
+                    @selectPlace="selectLocation"
+                    v-model="queryLocation"  
+                    :places="vehicleStore.places"
+                    :placeholder="'Enter Pickup Location'"
                     />
+
                     <SelectDestinationInput 
-                        @selectPlace="selectDestination"
-                        v-model="destination"
-                        :places="vehicleStore.places"
-                        :placeholder="'Enter Drop Location'"
+                    @selectPlace="selectDestination"
+                    v-model="queryDestination" 
+                    :places="vehicleStore.places"
+                    :placeholder="'Enter Drop Location'"
                     />
+
                 </div>
                 <button
                     @click="bookDriver"
@@ -69,8 +71,8 @@ import { useRouter } from 'vue-router';
 const autoCompleteStore = useAutoCompleteStore();
 const { showSuggestionsLocation, 
         showSuggestionsDestination,
-        // queryDestination,
-        // queryLocation
+        queryDestination,
+        queryLocation
       } = storeToRefs(autoCompleteStore);
 
 const vehicleStore = useVehicleStore();
@@ -81,8 +83,8 @@ const { destination, location, queryLocationMap, queryDestinationMap } = storeTo
 function selectLocation(place) {
   if (place?.geometry?.coordinates) {
     location.value = place.geometry.coordinates;
-    console.log('Selected location:', place);
-    queryLocationMap.value = place.place_name; // this matters
+    queryLocationMap.value = place.place_name; // Map label
+    queryLocation.value = place.place_name;     // Input field text
     showSuggestionsLocation.value = false;
   }
 }
@@ -90,8 +92,8 @@ function selectLocation(place) {
 function selectDestination(place) {
   if (place?.geometry?.coordinates) {
     destination.value = place.geometry.coordinates;
-    console.log('Selected destination:', place);
-    queryDestinationMap.value = place.place_name; // also matters
+    queryDestinationMap.value = place.place_name; // Map label
+    queryDestination.value = place.place_name;     // Input field text
     showSuggestionsDestination.value = false;
   }
 }
