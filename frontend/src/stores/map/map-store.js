@@ -1,36 +1,31 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 export const useMapStore = defineStore('map', () => {
   const destination = ref([]);
   const location = ref([]);
-  const queryDestination = ref('');
-  const queryLocation = ref('');
+  const queryDestinationMap = ref('');
+  const queryLocationMap = ref('');
 
   const getLocationCoordinates = () => ({
     latitude: location.value?.[1],
     longitude: location.value?.[0],
-    place: queryLocation.value,
+    place: queryLocationMap.value,
   });
 
   const getDestinationCoordinates = () => ({
     latitude: destination.value?.[1],
     longitude: destination.value?.[0],
-    place: queryDestination.value,
+    place: queryDestinationMap.value,
   });
-
-  const placeLocation = computed(() => queryLocation.value);
-  const placeDestination = computed(() => queryDestination.value);
 
   return {
     destination,
     location,
-    queryDestination,
-    queryLocation,
+    queryDestinationMap,
+    queryLocationMap,
     getLocationCoordinates,
     getDestinationCoordinates,
-    placeLocation,
-    placeDestination,
   };
 });
 

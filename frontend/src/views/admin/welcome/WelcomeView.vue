@@ -69,20 +69,20 @@ import { useRouter } from 'vue-router';
 const autoCompleteStore = useAutoCompleteStore();
 const { showSuggestionsLocation, 
         showSuggestionsDestination,
-        queryDestination,
-        queryLocation
+        // queryDestination,
+        // queryLocation
       } = storeToRefs(autoCompleteStore);
 
 const vehicleStore = useVehicleStore();
 const mapStore = useMapStore();
 const { vehicleData } = storeToRefs(vehicleStore);
-const { destination, location } = storeToRefs(mapStore);
+const { destination, location, queryLocationMap, queryDestinationMap } = storeToRefs(mapStore);
 
 function selectLocation(place) {
   if (place?.geometry?.coordinates) {
     location.value = place.geometry.coordinates;
-    console.log('Selected location:', place.place_name);
-    queryLocation.value = place.place_name; // this matters
+    console.log('Selected location:', place);
+    queryLocationMap.value = place.place_name; // this matters
     showSuggestionsLocation.value = false;
   }
 }
@@ -90,8 +90,8 @@ function selectLocation(place) {
 function selectDestination(place) {
   if (place?.geometry?.coordinates) {
     destination.value = place.geometry.coordinates;
-    console.log('Selected destination:', place.place_name);
-    queryDestination.value = place.place_name; // also matters
+    console.log('Selected destination:', place);
+    queryDestinationMap.value = place.place_name; // also matters
     showSuggestionsDestination.value = false;
   }
 }
