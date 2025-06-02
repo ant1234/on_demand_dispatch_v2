@@ -79,30 +79,39 @@ const { vehicleData } = storeToRefs(vehicleStore);
 const { destination, location } = storeToRefs(mapStore);
 
 function selectLocation(place) {
-    if (place?.geometry?.coordinates) {
-        location.value = place?.geometry?.coordinates;
-        showSuggestionsLocation.value = false;
-        queryLocation.value = place?.place_name;
-    }
+  if (place?.geometry?.coordinates) {
+    location.value = place.geometry.coordinates;
+    console.log('Selected location:', place.place_name);
+    queryLocation.value = place.place_name; // this matters
+    showSuggestionsLocation.value = false;
+  }
 }
 
 function selectDestination(place) {
-    if (place?.geometry?.coordinates) {
-        destination.value = place?.geometry?.coordinates;
-        showSuggestionsDestination.value = false;
-        queryDestination.value = place?.place_name;
-    }
+  if (place?.geometry?.coordinates) {
+    destination.value = place.geometry.coordinates;
+    console.log('Selected destination:', place.place_name);
+    queryDestination.value = place.place_name; // also matters
+    showSuggestionsDestination.value = false;
+  }
 }
+
 
 const Router = useRouter();
 
 function bookDriver() {
+
     if (!location.value || !destination.value) {
         alert('Please select both pickup and drop locations.');
         return;
     }
+    console.log('Booking driver with:', {
+        pickup: location.value,
+        drop: destination.value
+    });
     Router.push('/map');
 }
+
 
 onMounted(async () => {
     await vehicleStore.getVehicles();

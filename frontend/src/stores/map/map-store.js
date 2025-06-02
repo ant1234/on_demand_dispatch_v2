@@ -1,47 +1,39 @@
-// import { get } from 'core-js/core/dict';
 import { defineStore, acceptHMRUpdate } from 'pinia';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 export const useMapStore = defineStore('map', () => {
+  const destination = ref([]);
+  const location = ref([]);
+  const queryDestination = ref('');
+  const queryLocation = ref('');
 
-    const destination = ref({});
-    const location = ref({});
+  const getLocationCoordinates = () => ({
+    latitude: location.value?.[1],
+    longitude: location.value?.[0],
+    place: queryLocation.value,
+  });
 
-    function getLocationCoordinates() {
+  const getDestinationCoordinates = () => ({
+    latitude: destination.value?.[1],
+    longitude: destination.value?.[0],
+    place: queryDestination.value,
+  });
 
-      const longitude = location?.value?.properties?.longitude || 0;
-      const latitude = location?.value?.properties?.latitude || 0;
-      const place = location?.value?.properties?.place_formatted || 0;
+  const placeLocation = computed(() => queryLocation.value);
+  const placeDestination = computed(() => queryDestination.value);
 
-        return {
-            latitude: latitude,
-            longitude: longitude,
-            place: place,
-        };
-    }
-
-    function getDestinationCoordinates() {
-
-      const longitude = location?.value?.properties?.longitude || 0;
-      const latitude = location?.value?.properties?.latitude || 0;
-      const place = location?.value?.properties?.place_formatted || 0;
-
-        return {
-            latitude: latitude,
-            longitude: longitude,
-            place: place,
-        };
-    }
-
-    return {
-        destination,
-        location,
-        getLocationCoordinates,
-        getDestinationCoordinates,
-    };
-
+  return {
+    destination,
+    location,
+    queryDestination,
+    queryLocation,
+    getLocationCoordinates,
+    getDestinationCoordinates,
+    placeLocation,
+    placeDestination,
+  };
 });
 
-if(import.meta.hot) {
+if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useMapStore, import.meta.hot));
 }

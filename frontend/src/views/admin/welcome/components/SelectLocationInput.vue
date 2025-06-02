@@ -28,7 +28,6 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue';
 import  { storeToRefs } from 'pinia';
 import { useVehicleStore } from '@/stores/vehicle/vehicle-store';
 import { _debounce } from '@/helper/utils';
@@ -40,16 +39,21 @@ const { queryLocation, showSuggestionsLocation } = storeToRefs(autoCompleteStore
 const vehicleStore = useVehicleStore();
 const { places, loading } = storeToRefs(vehicleStore);
 
+const emit = defineEmits(['selectPlace']);
 defineProps(['placeholder']);
-defineEmits(['selectPlace']);
 
 const search = _debounce(async () => {
-        await vehicleStore.getPlaces(queryLocation.value);
+    await vehicleStore.getPlaces(queryLocation.value);
 }, 500);
 
 function hideSuggestions() {
     setTimeout(() => {
         showSuggestionsLocation.value = false;
     }, 100);
+}
+
+function selectPlace(place) {
+    emit('selectPlace', place);
+    showSuggestionsLocation.value = false;
 }
 </script>
