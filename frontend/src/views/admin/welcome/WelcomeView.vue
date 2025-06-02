@@ -36,6 +36,7 @@
 
                 </div>
                 <button
+                    v-show="_hideBookButton"
                     @click="bookDriver"
                     class="flex justify-center font-semibold rounded-md bg-indigo-700 text-white px-2 py-2 w-[100%]"
                 >
@@ -48,7 +49,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 p-2 gap-2">
             <VehicleList 
                 :vehicles="vehicleData" 
-                hideBookButton
+                :hideBookButton = "_hideBookButton"
             />
         </div>
     </div>
@@ -63,10 +64,11 @@ import SelectDestinationInput from './components/SelectDestinationInput.vue';
 import { useVehicleStore } from '@/stores/vehicle/vehicle-store';
 import { useAutoCompleteStore } from '@/stores/vehicle/auto-complete-store';
 import { storeToRefs } from 'pinia';
-import { onMounted} from 'vue';
+import { onMounted, ref } from 'vue';
 import VehicleList from './components/VehicleList.vue';
 import { useMapStore } from '@/stores/map/map-store';
 import { useRouter } from 'vue-router';
+import { hideBookButton } from "../../../middleware/hideBookButton";
 
 const autoCompleteStore = useAutoCompleteStore();
 const { showSuggestionsLocation, 
@@ -110,6 +112,7 @@ function bookDriver() {
     Router.push('/map');
 }
 
+const _hideBookButton = ref(hideBookButton());
 
 onMounted(async () => {
     await vehicleStore.getVehicles();
