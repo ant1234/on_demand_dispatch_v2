@@ -107,10 +107,6 @@ function bookDriver() {
         alert('Please select both pickup and drop locations.');
         return;
     }
-    console.log('Booking driver with:', {
-        pickup: location.value,
-        drop: destination.value
-    });
     Router.push('/map');
 }
 

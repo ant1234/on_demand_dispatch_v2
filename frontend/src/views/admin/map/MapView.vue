@@ -8,6 +8,9 @@
   import L from 'leaflet';
   import { ref, onMounted } from 'vue';
   import { useMapStore } from '@/stores/map/map-store';
+  import 'leaflet-routing-machine';
+  import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+  // Import Leaflet CSS
   import 'leaflet/dist/leaflet.css';
   
   // Patch icon URLs
@@ -24,21 +27,10 @@
   
   const map = ref(null);
   const mapStore = useMapStore();
-  console.log('MapStore queryLocation:', mapStore.queryLocationMap);
-  console.log('MapStore queryDestination:', mapStore.queryDestinationMap);
   
   onMounted(() => {
     const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = mapStore.getLocationCoordinates();
     const { latitude: dropLat, longitude: dropLng, place: dropPlace } = mapStore.getDestinationCoordinates();
-  
-    console.log({
-      pickupLat,
-      pickupLng,
-      dropLat,
-      dropLng,
-      pickupPlace,
-      dropPlace,
-    });
   
     if (
       pickupLat === undefined || pickupLng === undefined ||
@@ -60,6 +52,16 @@
     L.marker([dropLat, dropLng])
       .addTo(map.value)
       .bindPopup(`Destination: ${dropPlace || 'Unknown destination'}`);
+
+    L.Routing.control({
+        waypoints: [
+            L.latLng(pickupLat, pickupLng),
+            L.latLng(dropLat, dropLng)
+        ],
+        lineOptions: { styles: [{ color: "blue", weight: 5, opacity: 0.8 }] },
+        routeWhileDragging: true,
+    }).addTo(map.value);
+
   });
   </script>
   
