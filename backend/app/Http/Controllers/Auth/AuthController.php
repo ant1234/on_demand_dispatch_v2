@@ -9,6 +9,7 @@ use App\Mail\SendEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Events\SendEmailEvent;
+use App\Models\DriverStatus;
 use DB;
 
 
@@ -71,12 +72,14 @@ class AuthController extends Controller
     
         // ✅ Generate Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
+        $status = DriverStatus::getDriverStatusById($user->id);
     
         return response()->json([
             'message' => 'User logged in successfully.',
             'user' => $user,
             'token' => $token,
-            'isLogged' => true
+            'isLogged' => true,
+            'driverStatus' => $status->getData()->status ?? null,
         ], 200);
     }    
 

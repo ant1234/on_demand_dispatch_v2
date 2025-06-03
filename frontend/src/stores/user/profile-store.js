@@ -10,17 +10,14 @@ export const useProfileStore = defineStore('profile', () => {
 
     const driverStatus = ref([
         {
-            id: 0,
-            value: 'STATUS_UNAVAILABLE',
-            name: 'Unavailable',
+            value: 0,
+            name: 'STATUS_UNAVAILABLE',
         },
         {
-            id: 0,
-            value: 'STATUS_AVAILABLE',
-            name: 'Available',       
+            value: 1,
+            name: 'STATUS_AVAILABLE',       
         },
     ]);
-    
 
     async function modifyDriverStatus(input) {
 

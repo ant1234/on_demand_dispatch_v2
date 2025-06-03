@@ -93,10 +93,9 @@ async function saveDriverStatus(){
 }
 
 function getStatusVal(event){
-    const val=event.target.value
-    status.value=val
+    const val = event.target.value
+    status.value = val
 }
-
 
 const mapStore = useMapStore();
 const { driverLocation } = storeToRefs(mapStore);

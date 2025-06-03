@@ -41,4 +41,5 @@ class DriverController extends Controller
         }
         return response()->json(['message' => 'Driver status updated successfully']);
     }
+
 }

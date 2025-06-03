@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class DriverStatus extends Model
 {
     //
@@ -22,5 +23,17 @@ class DriverStatus extends Model
             default:
                 return false;
         }
+    }
+
+
+    public static function getDriverStatusById($userId)
+    {
+        $driverStatus = DriverStatus::where('user_id', $userId)->first();
+
+        if (is_null($driverStatus)) {
+            return response()->json(['message' => 'Driver status not found'], 404);
+        }
+
+        return response()->json(['status' => $driverStatus->status]);
     }
 }
