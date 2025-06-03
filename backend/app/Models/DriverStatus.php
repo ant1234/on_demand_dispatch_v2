@@ -23,5 +23,4 @@ class DriverStatus extends Model
                 return false;
         }
     }
-
 }

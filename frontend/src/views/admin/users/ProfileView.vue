@@ -14,15 +14,18 @@
                   </a> </span>
                   <span>Role : {{userData?.user?.role}}</span>
                   
-                  <div v-show="showDriverStatus()">Status : {{ userData?.driverStatus }} <span class="text-gray-800 font-bold py-1 px-2 rounded-md"></span></div>
+                  <div v-show="showDriverStatus">Status : {{ userData?.driverStatus }} <span class="text-gray-800 font-bold py-1 px-2 rounded-md"></span></div>
 
                 </div>
-                <hr v-show="showDriverStatus()" class="w-[25%]  py-2">
 
-                <div v-show="showDriverStatus()" class="mb-3">
-                    <select
+                <hr v-show="showDriverStatus" class="w-[25%]  py-2">
+
+                <div v-show="showDriverStatus" class="mb-3">
+
+                <select
                     class="w-[25%] focus:ring focus:ring-blue-300 mb-3 border rounded-md py-2 px-2"
-                @change="getStatusVal"
+                    @change="getStatusVal"
+                    v-model="status"
                 >
                     <option value="">Status</option>
                     <option v-for="status in driverStatus"
@@ -43,7 +46,7 @@
 
 
                 <!-- change driver location  -->
-                <div v-show="showDriverStatus()">
+                <div v-show="showDriverStatus">
                     <SelectDriverLocation @selectPlace="selectLocation" :placeholder="'Type Location'"/>
 
                 <button
@@ -59,33 +62,34 @@
     </div>
 </template>
 <script setup>
-// import { storeToRefs } from 'pinia';
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { ADMIN_ROLE, CUSTOMER_ROLE } from '@/constants/roles';
 import { getUserData } from '@/helper/utils';
-// import { useProfileStore } from '@/stores/user/profile-store';
+import { useProfileStore } from '@/stores/user/profile-store';
 import { onMounted, ref } from 'vue';
 // import SelectDriverLocation from './components/SelectDriverLocation.vue';
-// import { useMapStore } from '@/stores/map/map-store';
+import { useMapStore } from '@/stores/map/map-store';
 import { useRouter } from 'vue-router';
-// import { useAutoCompleteStore } from '@/stores/vehicle/auto-complete-store';
+import { useAutoCompleteStore } from '@/stores/vehicle/auto-complete-store';
 
-const userData=getUserData()
+const userData = getUserData();
 
-function showDriverStatus(){
-    const role=userData?.user?.role
+const showDriverStatus = computed(() => {
+  const role = userData?.user?.role;
+  return role !== ADMIN_ROLE && role !== CUSTOMER_ROLE;
+});
 
-    if(role===ADMIN_ROLE||role===CUSTOMER_ROLE) return false
-    return true
-}
+const profileStore=useProfileStore();
+const {loading, driverStatus} = storeToRefs(profileStore);
 
-// const profileStore=useProfileStore()
-// const {loading,driverStatus}=storeToRefs(profileStore)
-const status=ref(null)
+console.log(driverStatus.value);
+
+const status = ref(null);
 
 async function saveDriverStatus(){
-    // const userId=userData?.user?.id
-//  await  profileStore.modifyDriverStatus({user_id:userId,status:status.value})
-
+    const userId = userData?.user?.id
+    await profileStore.modifyDriverStatus({user_id:userId, status:status.value})
 }
 
 function getStatusVal(event){
@@ -94,21 +98,20 @@ function getStatusVal(event){
 }
 
 
-// const mapStore = useMapStore();
-// const { driverLocation } = storeToRefs(mapStore);
+const mapStore = useMapStore();
+const { driverLocation } = storeToRefs(mapStore);
 
-// const autoCompleteStore = useAutoCompleteStore();
-// const {
-   
-//     queryLocation,
-//     showSuggestionsLocation,
-// } = storeToRefs(autoCompleteStore);
+const autoCompleteStore = useAutoCompleteStore();
+const {
+        queryLocation,
+        showSuggestionsLocation,
+    } = storeToRefs(autoCompleteStore);
 
-// function selectLocation(place) {
-//     driverLocation.value = place;
-//     showSuggestionsLocation.value = false;
-//     queryLocation.value = place?.properties?.full_address;
-// }
+function selectLocation(place) {
+    driverLocation.value = place;
+    showSuggestionsLocation.value = false;
+    queryLocation.value = place?.properties?.full_address;
+}
 
 
 const router = useRouter();

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Vehicle\VehicleController;
 use App\Http\Controllers\mapbox\PlaceController;
+use App\Http\Controllers\Driver\DriverController;
 
 
 Route::get('/user', function (Request $request) {
@@ -21,6 +22,13 @@ Route::controller(AuthController::class)->group(function () {
 
     Route::post('/users/verify-email', 'validateUserEmail')
         ->name('users.validateUserEmail');
+
+});
+
+Route::controller(DriverController::class)->group(function () {
+
+    Route::post('/driver/status', 'changeDriverStatus')
+        ->name('driver.changeDriverStatus');
 
 });
 
