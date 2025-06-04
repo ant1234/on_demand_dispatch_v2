@@ -2,36 +2,38 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
 
 export const useMapStore = defineStore('map', () => {
-  const destination = ref([]);
-  const location = ref([]);
+
+  const customerDestination = ref([]);
+  const customerLocation = ref([]);
   const queryDestinationMap = ref('');
   const queryLocationMap = ref('');
-  const driverLocation = ref({
-    latitude: 0,
-    longitude: 0,
-    place: '',
-  });
+  const driverLocation = ref({});
 
-  const getLocationCoordinates = () => ({
-    latitude: location.value?.[1],
-    longitude: location.value?.[0],
+  const getCustomerLocationCoordinates = () => ({
+    latitude: customerLocation.value?.[1],
+    longitude: customerLocation.value?.[0],
     place: queryLocationMap.value,
   });
 
-  const getDestinationCoordinates = () => ({
-    latitude: destination.value?.[1],
-    longitude: destination.value?.[0],
+  const getCustomerDestinationCoordinates = () => ({
+    latitude: customerDestination.value?.[1],
+    longitude: customerDestination.value?.[0],
     place: queryDestinationMap.value,
   });
 
+  const getDriverLocationCoordinates = () => ({
+    latitude: driverLocation.value?.geometry?.coordinates?.[1],
+    longitude: driverLocation.value?.geometry?.coordinates?.[0],
+    place: driverLocation.value?.place_name || '',
+  });
+
   return {
-    destination,
-    location,
+    getCustomerDestinationCoordinates,
+    getCustomerLocationCoordinates,
+    getDriverLocationCoordinates,
     queryDestinationMap,
     queryLocationMap,
     driverLocation,
-    getLocationCoordinates,
-    getDestinationCoordinates,
   };
 });
 

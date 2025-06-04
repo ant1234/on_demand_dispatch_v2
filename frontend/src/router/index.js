@@ -9,7 +9,9 @@ import VehicleView from '@/views/admin/vehicles/VehicleView.vue';
 import WelcomeView from '@/views/admin/welcome/WelcomeView.vue';
 import { isAdmin } from "@/middleware/isAdmin";
 import ProfileView from '@/views/admin/users/ProfileView.vue';
-import MapView from '@/views/admin/map/MapView.vue';
+import CustomerMapView from '@/views/admin/map/CustomerMapView.vue';
+import DriverMapView from '@/views/admin/map/DriverMapView.vue';
+
 
 const routes = [
   {
@@ -45,8 +47,12 @@ const routes = [
         component: ProfileView,
       },
       {
-        path: '/map',
-        component: MapView,
+        path: '/customer_map',
+        component: CustomerMapView,
+      },
+      {
+        path: '/driver_map',
+        component: DriverMapView,
       }
     ],
   },

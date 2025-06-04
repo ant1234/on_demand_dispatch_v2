@@ -29,8 +29,8 @@
   const mapStore = useMapStore();
   
   onMounted(() => {
-    const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = mapStore.getLocationCoordinates();
-    const { latitude: dropLat, longitude: dropLng, place: dropPlace } = mapStore.getDestinationCoordinates();
+    const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = mapStore.getCustomerLocationCoordinates();
+    const { latitude: dropLat, longitude: dropLng, place: dropPlace } = mapStore.getCustomerDestinationCoordinates();
   
     if (
       pickupLat === undefined || pickupLng === undefined ||

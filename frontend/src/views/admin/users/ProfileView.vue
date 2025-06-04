@@ -109,7 +109,6 @@ function selectLocation(place) {
     queryLocation.value = place?.place_name;
 }
 
-
 const router = useRouter();
 
 async function plotDriverLocationOnMap() {

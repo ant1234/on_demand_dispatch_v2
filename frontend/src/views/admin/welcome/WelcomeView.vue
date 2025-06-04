@@ -80,11 +80,11 @@ const { showSuggestionsLocation,
 const vehicleStore = useVehicleStore();
 const mapStore = useMapStore();
 const { vehicleData } = storeToRefs(vehicleStore);
-const { destination, location, queryLocationMap, queryDestinationMap } = storeToRefs(mapStore);
+const { customerDestination, customerLocation, queryLocationMap, queryDestinationMap } = storeToRefs(mapStore);
 
 function selectLocation(place) {
   if (place?.geometry?.coordinates) {
-    location.value = place.geometry.coordinates;
+    customerLocation.value = place.geometry.coordinates;
     queryLocationMap.value = place.place_name; // Map label
     queryLocation.value = place.place_name;     // Input field text
     showSuggestionsLocation.value = false;
@@ -93,23 +93,22 @@ function selectLocation(place) {
 
 function selectDestination(place) {
   if (place?.geometry?.coordinates) {
-    destination.value = place.geometry.coordinates;
+    customerDestination.value = place.geometry.coordinates;
     queryDestinationMap.value = place.place_name; // Map label
     queryDestination.value = place.place_name;     // Input field text
     showSuggestionsDestination.value = false;
   }
 }
 
-
 const Router = useRouter();
 
 function bookDriver() {
 
-    if (!location.value || !destination.value) {
+    if (!customerLocation.value || !customerDestination.value) {
         alert('Please select both pickup and drop locations.');
         return;
     }
-    Router.push('/map');
+    Router.push('/customer_map');
 }
 
 const _hideBookButton = ref(hideBookButton());
