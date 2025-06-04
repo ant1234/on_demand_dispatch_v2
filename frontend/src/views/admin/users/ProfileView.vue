@@ -48,7 +48,6 @@
                 <!-- change driver location  -->
                 <div v-show="showDriverStatus">
                     <SelectDriverLocation @selectPlace="selectLocation" :placeholder="'Type Location'"/>
-
                 <button
                 @click="plotDriverLocationOnMap"
                     class="flex justify-center text-white bg-indigo-700 font-semibold rounded-lg px-4 py-2"
@@ -68,7 +67,7 @@ import { ADMIN_ROLE, CUSTOMER_ROLE } from '@/constants/roles';
 import { getUserData } from '@/helper/utils';
 import { useProfileStore } from '@/stores/user/profile-store';
 import { onMounted, ref } from 'vue';
-// import SelectDriverLocation from './components/SelectDriverLocation.vue';
+import SelectDriverLocation from '@/views/admin/users/component/SelectDriverLocation.vue';
 import { useMapStore } from '@/stores/map/map-store';
 import { useRouter } from 'vue-router';
 import { useAutoCompleteStore } from '@/stores/vehicle/auto-complete-store';
@@ -82,8 +81,6 @@ const showDriverStatus = computed(() => {
 
 const profileStore=useProfileStore();
 const {loading, driverStatus} = storeToRefs(profileStore);
-
-console.log(driverStatus.value);
 
 const status = ref(null);
 

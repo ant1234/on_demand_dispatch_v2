@@ -6,6 +6,11 @@ export const useMapStore = defineStore('map', () => {
   const location = ref([]);
   const queryDestinationMap = ref('');
   const queryLocationMap = ref('');
+  const driverLocation = ref({
+    latitude: 0,
+    longitude: 0,
+    place: '',
+  });
 
   const getLocationCoordinates = () => ({
     latitude: location.value?.[1],
@@ -24,6 +29,7 @@ export const useMapStore = defineStore('map', () => {
     location,
     queryDestinationMap,
     queryLocationMap,
+    driverLocation,
     getLocationCoordinates,
     getDestinationCoordinates,
   };
