@@ -106,7 +106,7 @@ const {
 function selectLocation(place) {
     driverLocation.value = place;
     showSuggestionsLocation.value = false;
-    queryLocation.value = place?.properties?.full_address;
+    queryLocation.value = place?.place_name;
 }
 
 
