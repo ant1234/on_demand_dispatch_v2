@@ -57,7 +57,7 @@ export const useMapStore = defineStore('map', () => {
     const userData = getUserData();
     try {
         loading.value = true;
-        const data = await getData(`/driver_location?user_id=${userData?.user?.id}`);
+        const data = await getData(`/get_driver_location?user_id=${userData?.user?.id}`);
         driverLocation.value = data?.data || {};
         loading.value = false;
     } catch (error) {

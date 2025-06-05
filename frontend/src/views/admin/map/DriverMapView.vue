@@ -1,6 +1,25 @@
 <template>
     <div class="h-screen w-full">
-      <div id="map" class="h-full w-full"></div>
+      <div
+        class="mt-5 right-4 absolute max-w-[400px] z-[1000] bg-white p-3 rounded-md shadow-lg"
+      >
+        <div class="flex flex-col mb-2">
+          <div class="flex flex-col">
+            <div>
+              <span class="font-bold">Location</span> : {{ driverLocation.address }}
+              
+            </div>
+          </div>
+        </div>
+        <button
+          @click="changeLocation"
+          class="flex justify-center font-semibold rounded-md bg-indigo-700 text-white px-2 py-2 w-[100%]"
+        >
+          <MapPinIcon class="pt-1" />
+          <span class="">Change Location</span>
+        </button>
+      </div>
+      <div class="h-screen w-full" id="map"></div>
     </div>
   </template>
   
@@ -8,6 +27,7 @@
   import L from 'leaflet';
   import { ref, onMounted } from 'vue';
   import { useMapStore } from '@/stores/map/map-store';
+  import { storeToRefs } from 'pinia';
   import 'leaflet-routing-machine';
   import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
   // Import Leaflet CSS
@@ -27,8 +47,12 @@
   
   const map = ref(null);
   const mapStore = useMapStore();
+  const { driverLocation } = storeToRefs(mapStore);
   
-  onMounted(() => {
+  onMounted(async () => {
+
+    // await mapStore.getDriverLocation();
+
     const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = mapStore.getDriverLocationCoordinates();
   
     if (

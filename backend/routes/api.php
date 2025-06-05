@@ -33,7 +33,7 @@ Route::controller(DriverController::class)->group(function () {
     Route::post('/driver_location', 'storeDriverLocation')
         ->name('driver.storeDriverLocation');
 
-    Route::get('/driver_locations', 'getDriverLocation')
+    Route::get('/get_driver_location', 'getDriverLocation')
         ->name('driver.getDriverLocation');
 
 });
