@@ -62,7 +62,7 @@
                     alt="user avatar"
                     class="rounded-full border-2 hover:border-white w-10 h-10 cursor-pointer"
                 />
-                <ul v-show="topNavBarMenu" class="bg-white absolute right-4 py-2 px-2 rounded-md shadow-lg w-[250px] divide-y divide-gray-200">
+                <ul v-show="topNavBarMenu" class="z-[1000] bg-white absolute right-4 py-2 px-2 rounded-md shadow-lg w-[250px] divide-y divide-gray-200">
                     <li class="px-2 py-2">
                         {{ userData?.user.name }}
                         <br>
