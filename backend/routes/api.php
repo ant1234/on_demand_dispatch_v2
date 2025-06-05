@@ -30,6 +30,12 @@ Route::controller(DriverController::class)->group(function () {
     Route::post('/driver/status', 'changeDriverStatus')
         ->name('driver.changeDriverStatus');
 
+    Route::post('/driver_location', 'storeDriverLocation')
+        ->name('driver.storeDriverLocation');
+
+    Route::get('/driver_locations', 'getDriverLocation')
+        ->name('driver.getDriverLocation');
+
 });
 
 Route::controller(PlaceController::class)->group(function () {

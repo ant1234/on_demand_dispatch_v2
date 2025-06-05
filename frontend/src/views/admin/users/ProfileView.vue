@@ -113,11 +113,10 @@ const router = useRouter();
 
 async function plotDriverLocationOnMap() {
 
-    // await mapStore.storeDriverLocation()
+    await mapStore.storeDriverLocation()
 
     router.push("/driver_map");
 }
-
 
 onMounted(()=>{
     console.log('data :', userData?.user.email)
