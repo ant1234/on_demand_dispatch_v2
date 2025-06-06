@@ -77,8 +77,8 @@ class DriverController extends Controller
         if (!is_null($driverLocation)) {
             return response()->json([
                 'address' => $driverLocation->location_address,
-                'latitude' => $driverLocation->location_latitude,
-                'longitude' => $driverLocation->location_longitude
+                'latitude' => floatval($driverLocation->location_latitude),
+                'longitude' => floatval($driverLocation->location_longitude)
             ]);
         } else {
             return response([]);

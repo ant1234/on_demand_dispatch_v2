@@ -12,7 +12,7 @@
                         US taxi operator.
                 </h1>
                 <div class="flex flex-col mb-2">
-                    <select name="" id="" class="mb-2 border rounded-md py-2 px-2 w-[100%]">
+                    <select @change="selectVehicleId" name="" id="" class="mb-2 border rounded-md py-2 px-2 w-[100%]">
                         <option value="">Select Taxi</option>
                         <option 
                             v-for="vehicle in vehicleData" 
@@ -80,7 +80,13 @@ const { showSuggestionsLocation,
 const vehicleStore = useVehicleStore();
 const mapStore = useMapStore();
 const { vehicleData } = storeToRefs(vehicleStore);
-const { customerDestination, customerLocation, queryLocationMap, queryDestinationMap } = storeToRefs(mapStore);
+const { customerDestination, customerLocation, queryLocationMap, queryDestinationMap, vehicleId } = storeToRefs(mapStore);
+
+function selectVehicleId(event){
+    const val = event.target.value;
+    vehicleId.value = val;
+}
+
 
 function selectLocation(place) {
   if (place?.geometry?.coordinates) {

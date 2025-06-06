@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Vehicle\VehicleController;
 use App\Http\Controllers\mapbox\PlaceController;
 use App\Http\Controllers\Driver\DriverController;
-
+use App\Http\Controllers\Customer\CustomerTripController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -35,6 +35,16 @@ Route::controller(DriverController::class)->group(function () {
 
     Route::get('/get_driver_location', 'getDriverLocation')
         ->name('driver.getDriverLocation');
+
+});
+
+Route::controller(CustomerTripController::class)->group(function () {
+
+    Route::post('/customer_trip', 'storeCustomerTrip')
+        ->name('customer.storeCustomerTrip');
+
+    Route::get('/customer_trip', 'getCustomerTripData')
+        ->name('customer.getCustomerTripData');
 
 });
 

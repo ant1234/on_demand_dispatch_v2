@@ -6,7 +6,7 @@
         <div class="flex flex-col mb-2">
           <div class="flex flex-col">
             <div>
-              <span class="font-bold">Location</span> : {{ driverLocation.address }}
+              <span class="font-bold">Location</span> : {{ driverLocation.place_name }}
               
             </div>
           </div>
@@ -26,6 +26,7 @@
   <script setup>
   import L from 'leaflet';
   import { ref, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
   import { useMapStore } from '@/stores/map/map-store';
   import { storeToRefs } from 'pinia';
   import 'leaflet-routing-machine';
@@ -48,6 +49,12 @@
   const map = ref(null);
   const mapStore = useMapStore();
   const { driverLocation } = storeToRefs(mapStore);
+
+  const router = useRouter();
+
+  function changeLocation() {
+    router.push('/profile');
+  }
   
   onMounted(async () => {
 
@@ -62,7 +69,7 @@
       return;
     }
   
-    map.value = L.map('map').setView([pickupLat, pickupLng], 13);
+    map.value = L.map('map').setView([pickupLat, pickupLng], 14);
   
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value);
   
