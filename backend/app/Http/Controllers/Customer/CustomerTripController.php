@@ -25,14 +25,27 @@ class CustomerTripController extends Controller
                     'destination_address' => $request->destination_address,
                     'destination_latitude' => $request->destination_latitude,
                     'destination_longitude' => $request->destination_longitude,
-                    'trip_status' => CustomerTrip::ONGOING_STATUS,
+                    'trip_status' => CustomerTrip::PENDING_STATUS,
                     'user_id' => $request->user_id,
                     'vehicle_id' => $request->vehicle_id,
-                    'distance' => round($distance, 2),
-                    'total_price' => $totalPrice,
                 ]);
 
             return response()->json(['message' => 'Customer trip created successfully']);
+        } else {
+            CustomerTrip::where('user_id', $request->user_id)
+                ->where('trip_status', CustomerTrip::PENDING_STATUS)
+                ->update([
+                    'location_address' => $request->location_address,
+                    'location_latitude' => $request->location_latitude,
+                    'location_longitude' => $request->location_longitude,
+                    'destination_address' => $request->destination_address,
+                    'destination_latitude' => $request->destination_latitude,
+                    'destination_longitude' => $request->destination_longitude,
+                    'trip_status' => CustomerTrip::PENDING_STATUS,
+                    'user_id' => $request->user_id,
+                    'vehicle_id' => $request->vehicle_id,
+                ]);
+            return response()->json(['message' => 'Customer trip updated successfully']);
         }
     }
 

@@ -2,6 +2,7 @@ import { getUserData, showError, successMsg } from '@/helper/utils';
 import { postData, getData } from '@/helper/http';
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
+import { PENDING_STATUS } from '@/constants/trip-status';
 
 
 export const useMapStore = defineStore('map', () => {
@@ -34,56 +35,102 @@ export const useMapStore = defineStore('map', () => {
   });
 
   async function storeDriverLocation() {
-
-    const {latitude, longitude, place} = getDriverLocationCoordinates();
-    const userData = getUserData();
-
-    if (latitude === 'undefined' || longitude === 'undefined') {
-        showError('Please provide valid coordinates and place.');
-    } else {
-
-      try {
-        loading.value = true;
-        const data = await postData(`/driver_location`, {
-            user_id: userData?.user?.id,
-            longitude: longitude,
-            latitude: latitude,
-            address: place,
-        });
-        successMsg(data?.message);
-        loading.value = false;
-      } catch (error) {
-          loading.value = false;
-          console.error('Error fetching user data:', error);
+      const { longitude, latitude, place } = getDriverLocationCoordinates();
+      const userData = getUserData();
+      if (
+          typeof longitude === "undefined" ||
+          typeof latitude === "undefined"
+      ) {
+          showError("Please select a location !");
+      } else {
+          try {
+              loading.value = true;
+              const data = await postData(`/driver_location`, {
+                  user_id: userData?.user.id,
+                  longitude: longitude,
+                  latitude: latitude,
+                  address: place,
+              });
+              successMsg(data?.message);
+              loading.value = false;
+          } catch (errors) {
+              loading.value = false;
+              for (const message of errors) {
+                  showError(message);
+              }
+          }
       }
-    }
+  }
+
+  function validateBooking() {
+    let error=0;
+    return new Promise((resolve) => {
+        const { latitude: latitudeL } = getCustomerLocationCoordinates();
+        const { longitude: longitudeD } = getCustomerDestinationCoordinates();
+
+        if (typeof vehicleId.value === "object" || vehicleId.value === "") {
+            showError("Please select a vehicle or Taxi !");
+            error++
+            resolve(false);
+        } 
+
+        if (
+            typeof longitudeD === "undefined" ||
+            typeof latitudeL === "undefined"
+        ) {
+            error++
+            showError("Please select a location !");
+            resolve(false);
+        }
+
+        if(error===0){
+            resolve(true)
+        }
+    });
   }
 
   async function storeCustomerLocation() {
+      const {
+          place: placeL,
+          longitude: longitudeL,
+          latitude: latitudeL,
+      } = getCustomerLocationCoordinates();
+      const {
+          place: placeD,
+          longitude: longitudeD,
+          latitude: latitudeD,
+      } = getCustomerDestinationCoordinates();
 
-    const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = getCustomerLocationCoordinates();
-    const { latitude: dropLat, longitude: dropLng, place: dropPlace } = getCustomerDestinationCoordinates();
-    const userData = getUserData();
-
-    if (latitude === 'undefined' || longitude === 'undefined') {
-        showError('Please provide valid coordinates and place.');
-    } else {
+      const userData = getUserData();
 
       try {
-        loading.value = true;
-        const data = await postData(`/customer_location`, {
-            user_id: userData?.user?.id,
-            longitude: longitude,
-            latitude: latitude,
-            address: place,
-        });
-        successMsg(data?.message);
-        loading.value = false;
-      } catch (error) {
+          loading.value = true;
+          const data = await postData(`/customer_trip`, {
+              user_id: userData?.user.id,
+
+              location_address: placeL,
+              location_latitude: latitudeL,
+              location_longitude: longitudeL,
+              destination_address: placeD,
+              destination_latitude: latitudeD,
+              destination_longitude: longitudeD,
+              trip_status: PENDING_STATUS,
+              vehicle_id: vehicleId.value,
+          });
+          successMsg(data?.message);
           loading.value = false;
-          console.error('Error fetching user data:', error);
+      } catch (errors) {
+        loading.value = false;
+        if (Array.isArray(errors)) {
+          for (const message of errors) {
+            showError(message);
+          }
+        } else if (errors instanceof Error) {
+          showError(errors.message);
+        } else {
+          showError('Unknown error occurred');
+        }
       }
-    }
   }
 
   async function getDriverLocation() {
@@ -127,6 +174,7 @@ export const useMapStore = defineStore('map', () => {
   return {
     storeDriverLocation,
     storeCustomerLocation,
+    validateBooking,
     getDriverLocation,
     getCustomerDestinationCoordinates,
     getCustomerLocationCoordinates,
@@ -137,6 +185,8 @@ export const useMapStore = defineStore('map', () => {
     driverLocation,
     vehicleId,
     customerTripData,
+    customerDestination,
+    customerLocation,
   };
 });
 

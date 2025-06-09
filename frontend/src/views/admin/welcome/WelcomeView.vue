@@ -69,6 +69,7 @@ import VehicleList from './components/VehicleList.vue';
 import { useMapStore } from '@/stores/map/map-store';
 import { useRouter } from 'vue-router';
 import { hideBookButton } from "../../../middleware/hideBookButton";
+// import { map } from 'core-js/core/array';
 
 const autoCompleteStore = useAutoCompleteStore();
 const { showSuggestionsLocation, 
@@ -108,13 +109,13 @@ function selectDestination(place) {
 
 const Router = useRouter();
 
-function bookDriver() {
+async function bookDriver() {
 
-    if (!customerLocation.value || !customerDestination.value) {
-        alert('Please select both pickup and drop locations.');
-        return;
+    const data = await mapStore.validateBooking();
+    if(data === true) {
+        mapStore.storeCustomerLocation();
+        Router.push('/customer_map');
     }
-    Router.push('/customer_map');
 }
 
 const _hideBookButton = ref(hideBookButton());
