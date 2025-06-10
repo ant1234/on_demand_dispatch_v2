@@ -115,6 +115,8 @@ async function bookDriver() {
     if(data === true) {
         mapStore.storeCustomerLocation();
         Router.push('/customer_map');
+    } else {
+        console.error("Booking validation failed:", data);
     }
 }
 

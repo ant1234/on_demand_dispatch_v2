@@ -1,5 +1,6 @@
 import { getUserData, showError, successMsg } from '@/helper/utils';
 import { postData, getData } from '@/helper/http';
+import { ONGOING_STATUS } from '@/constants/trip-status'
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
 import { PENDING_STATUS } from '@/constants/trip-status';
@@ -63,43 +64,57 @@ export const useMapStore = defineStore('map', () => {
   }
 
   function validateBooking() {
-    let error=0;
     return new Promise((resolve) => {
-        const { latitude: latitudeL } = getCustomerLocationCoordinates();
-        const { longitude: longitudeD } = getCustomerDestinationCoordinates();
-
-        if (typeof vehicleId.value === "object" || vehicleId.value === "") {
-            showError("Please select a vehicle or Taxi !");
-            error++
-            resolve(false);
-        } 
-
-        if (
-            typeof longitudeD === "undefined" ||
-            typeof latitudeL === "undefined"
-        ) {
-            error++
-            showError("Please select a location !");
-            resolve(false);
-        }
-
-        if(error===0){
-            resolve(true)
-        }
+      const location = getCustomerLocationCoordinates();
+      const destination = getCustomerDestinationCoordinates();
+  
+      if (!location || !destination) {
+        showError("Location or destination is missing!");
+        return resolve(false);
+      }
+  
+      const { latitude: latitudeL } = location;
+      const { longitude: longitudeD } = destination;
+  
+      if (typeof vehicleId.value === "object" || vehicleId.value === "") {
+        showError("Please select a vehicle or Taxi !");
+        return resolve(false);
+      }
+  
+      if (
+        typeof longitudeD === "undefined" ||
+        typeof latitudeL === "undefined"
+      ) {
+        showError("Please select a location !");
+        return resolve(false);
+      }
+  
+      return resolve(true);
     });
   }
+  
 
   async function storeCustomerLocation() {
+
+      const location = getCustomerLocationCoordinates();
+      const destination = getCustomerDestinationCoordinates();
+      
+      if (!location || !destination) {
+          showError("Missing coordinates!");
+          return;
+      }
+      
       const {
           place: placeL,
           longitude: longitudeL,
           latitude: latitudeL,
-      } = getCustomerLocationCoordinates();
+      } = location;
+      
       const {
           place: placeD,
           longitude: longitudeD,
           latitude: latitudeD,
-      } = getCustomerDestinationCoordinates();
+      } = destination;
 
       const userData = getUserData();
 
@@ -154,22 +169,28 @@ export const useMapStore = defineStore('map', () => {
 
   async function getCustomerTripData() {
     const userData = getUserData();
+
     try {
-        loading.value = true;
-        const data = await getData(`/customer_trip?user_id=${userData?.user?.id}&vehicle_id=${vehicleId.value}`);
+      loading.value = true;
+      const data = await getData(
+        `/customer_trip?user_id=${userData?.user?.id}&trip_status=${ONGOING_STATUS}`
+      );
+      loading.value = false;
 
-        if(Array.isArray(data) || data?.data?.length === 0) {
-            window.location.href = '/welcome';
-        } else {
-            customerTripData.value = data?.data || {};
-            loading.value = false;
-        }
-
-    } catch (error) {
-        loading.value = false;
-        console.error('Error fetching user data:', error);
+      if (Array.isArray(data) && data.length === 0) {
+        window.location.href = "/app/welcome";
+      } else {
+        // 👇 FIXED HERE
+        customerTripData.value = Array.isArray(data) ? data[0] : data;
+      }
+    } catch (errors) {
+      loading.value = false;
+      for (const message of errors) {
+        showError(message);
+      }
     }
   }
+
 
   return {
     storeDriverLocation,
