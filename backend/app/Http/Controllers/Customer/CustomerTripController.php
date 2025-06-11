@@ -36,8 +36,6 @@ class CustomerTripController extends Controller
     }
 
 
-
-
     public function getCustomerTripData(Request $request)
     {
         $customerId = $request->user_id;

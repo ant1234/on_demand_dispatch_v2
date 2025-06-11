@@ -48,7 +48,7 @@
   
   const map = ref(null);
   const mapStore = useMapStore();
-  const { driverLocation } = storeToRefs(mapStore);
+  const { driverLocation, customerLocationForDriver } = storeToRefs(mapStore);
 
   const router = useRouter();
 
@@ -59,6 +59,7 @@
   onMounted(async () => {
 
     await mapStore.getDriverLocation();
+    await mapStore.getCustomerLocationForDriver();
 
     const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = mapStore.getDriverLocationCoordinates();
   
@@ -78,18 +79,42 @@
       .bindPopup(`Pickup: ${pickupPlace || 'Unknown pickup location'}`)
       .openPopup();
   
-    // L.marker([dropLat, dropLng])
-    //   .addTo(map.value)
-    //   .bindPopup(`Destination: ${dropPlace || 'Unknown destination'}`);
+    // customerLocationForDriver
+    customerLocationForDriver.value.forEach((location) => {
 
-    // L.Routing.control({
-    //     waypoints: [
-    //         L.latLng(pickupLat, pickupLng),
-    //         L.latLng(dropLat, dropLng)
-    //     ],
-    //     lineOptions: { styles: [{ color: "blue", weight: 5, opacity: 0.8 }] },
-    //     routeWhileDragging: true,
-    // }).addTo(map.value);
+        // circle code 
+        L.marker([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)])
+              .addTo(map.value)
+              .bindPopup(location?.location_address || 'Unknown customer location');
+
+        L.circle([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 500
+        }).addTo(map.value);
+        // end circle
+
+      L.marker([location.location_latitude, location.location_longitude])
+        .addTo(map.value)
+        .bindPopup(`Pickup: ${location.value.location_address || 'Unknown pickup location'}`)
+        .openPopup();
+
+      L.marker([location.destination_latitude, location.destination_longitude])
+        .addTo(map.value)
+        .bindPopup(`Destination: ${location.value.destination_address || 'Unknown destination'}`);
+
+      L.Routing.control({
+        waypoints: [
+          L.latLng(location.location_latitude, location.location_longitude),
+          L.latLng(location.destination_latitude, location.destination_longitude)
+        ],
+        router: L.Routing.mapbox(process.env.VUE_APP_MAPBOX_ACCESS_TOKEN),
+        lineOptions: { styles: [{ color: "blue", weight: 5, opacity: 0.8 }] },
+        routeWhileDragging: true,
+      }).addTo(map.value);
+
+    });
 
   });
   </script>

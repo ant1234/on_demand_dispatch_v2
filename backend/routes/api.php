@@ -49,6 +49,9 @@ Route::controller(CustomerTripController::class)->group(function () {
     Route::get('/driver_location/customer', 'getDriverLocationForCustomer')
         ->name('customer.getDriverLocationForCustomer');
 
+    Route::get('/customer_location/driver', 'getCustomerTripDataForDriver')
+        ->name('customer.getCustomerTripDataForDriver');
+
 });
 
 Route::controller(PlaceController::class)->group(function () {
