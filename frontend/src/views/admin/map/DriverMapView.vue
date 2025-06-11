@@ -58,7 +58,7 @@
   
   onMounted(async () => {
 
-    // await mapStore.getDriverLocation();
+    await mapStore.getDriverLocation();
 
     const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = mapStore.getDriverLocationCoordinates();
   

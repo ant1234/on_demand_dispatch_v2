@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen w-full">
     <div
-        class="mt-5 right-4 absolute max-w-[400px] z-[1000] bg-white p-3 rounded-md shadow-lg"
+        class="mt-5 right-4 absolute max-w-[400px] z-[10000] bg-white p-3 rounded-md shadow-lg"
       >
         <div class="flex flex-col mb-2">
           <div class="flex flex-col">
@@ -57,11 +57,12 @@ L.Icon.Default.mergeOptions({
 
 const map = ref(null);
 const mapStore = useMapStore();
-const { customerTripData } = storeToRefs(mapStore);
+const { customerTripData, driverLocationForCustomer } = storeToRefs(mapStore);
 
 onMounted(async () => {
 
-  console.log('ENV:', import.meta.env);
+  await mapStore.getDriverLocationForCustomer();
+
   // Fetch and assign mapped trip data from API
   const response = await mapStore.getCustomerTripData();
 
@@ -127,5 +128,25 @@ onMounted(async () => {
     lineOptions: { styles: [{ color: "blue", weight: 5, opacity: 0.8 }] },
     routeWhileDragging: true,
   }).addTo(map.value);
+
+
+  driverLocationForCustomer.value.forEach((location) => {
+
+    // circle code 
+    L.marker([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)])
+      .addTo(map.value)
+      .bindPopup(location?.location_address || 'Unknown driver location');
+
+    L.circle([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: 500
+    }).addTo(map.value);
+    // end circle
+  });
+
+
+
 });
 </script>

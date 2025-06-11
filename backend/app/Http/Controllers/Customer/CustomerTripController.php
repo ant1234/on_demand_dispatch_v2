@@ -21,7 +21,7 @@ class CustomerTripController extends Controller
             ->join('driver_statuses', 'driver_locations.user_id', '=', 'driver_statuses.user_id')
             ->join('users', 'driver_locations.user_id', '=', 'users.id')
 
-            ->where('driver_statuses.status', DriverStatus::AVAILABLE_STATUS)
+            ->where('driver_statuses.status', DriverStatus::STATUS_AVAILABLE)
             ->select(
                 'driver_locations.user_id',
                 'users.name as user_name',

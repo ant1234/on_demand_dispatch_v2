@@ -16,6 +16,7 @@ export const useMapStore = defineStore('map', () => {
   const loading = ref(false);
   const vehicleId = ref(null);
   const customerTripData = ref({});
+  const driverLocationForCustomer = ref([]);
 
   const getCustomerLocationCoordinates = () => ({
     latitude: customerLocation.value?.[1],
@@ -148,6 +149,25 @@ export const useMapStore = defineStore('map', () => {
       }
   }
 
+  async function getDriverLocationForCustomer() {
+    try {
+      loading.value = true;
+      const data = await getData('/driver_location/customer');
+  
+      if (Array.isArray(data) && data.length > 0) {
+        driverLocationForCustomer.value = data;
+      } else {
+        driverLocationForCustomer.value = [];
+      }
+  
+    } catch (error) {
+      console.error('Error fetching driver location:', error);
+      driverLocationForCustomer.value = [];
+    } finally {
+      loading.value = false;
+    }
+  }
+
   async function getDriverLocation() {
     const userData = getUserData();
     try {
@@ -201,6 +221,8 @@ export const useMapStore = defineStore('map', () => {
     getCustomerLocationCoordinates,
     getDriverLocationCoordinates,
     getCustomerTripData,
+    getDriverLocationForCustomer,
+    driverLocationForCustomer,
     queryDestinationMap,
     queryLocationMap,
     driverLocation,
