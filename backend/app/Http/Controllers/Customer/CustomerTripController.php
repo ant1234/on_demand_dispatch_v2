@@ -91,18 +91,21 @@ class CustomerTripController extends Controller
 
     public function getCustomerTripDataForDriver(Request $request)
     {
-
-
         $customerTrip = DB::table('customer_trips')
             ->join('users', 'customer_trips.user_id', '=', 'users.id')
             ->join('vehicles', 'customer_trips.vehicle_id', '=', 'vehicles.id')
-            ->where('customer_trips.trip_status', CustomerTrip::PENDING_STATUS)
-            ->select('customer_trips.*', 'users.name as user_name', 'vehicles.name as taxi_name', 'vehicles.model as taxi_model')
+            ->where('customer_trips.trip_status', CustomerTrip::ONGOING_STATUS)
+            ->select(
+                'customer_trips.*',
+                'users.name as user_name',
+                'vehicles.name as taxi_name',
+                'vehicles.model as taxi_model'
+            )
             ->get();
-
-
-        return response($customerTrip, 200);
+    
+        return response()->json(['data' => $customerTrip]);
     }
+    
     public function storeCustomerTrip(Request $request)
     {
 

@@ -48,75 +48,99 @@
   
   const map = ref(null);
   const mapStore = useMapStore();
-  const { driverLocation, customerLocationForDriver } = storeToRefs(mapStore);
+const { driverLocation, customerLocationForDriver} = storeToRefs(mapStore);
 
-  const router = useRouter();
 
-  function changeLocation() {
-    router.push('/profile');
-  }
+const router=useRouter()
+
+function changeLocation(){
+router.push('/profile')
+}
+
+onMounted(async () => {
+  await mapStore.getDriverLocation();
+  await mapStore.getCustomerLocationForDriver()
+ 
+
+  map.value = L.map("map").setView(
+    [driverLocation.value.latitude, driverLocation.value.longitude],
+    10
+  );
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map.value);
+
+  L.marker([
+    driverLocation.value.latitude,
+    driverLocation.value.longitude,
+  ])
+    .addTo(map.value)
+    .bindPopup(driverLocation.value.address)
+    .openPopup();
+
+    L.circle(
+      [
+        parseFloat(driverLocation.value.latitude),
+        parseFloat(driverLocation.value.longitude),
+      ],
+      {
+        color: "red",
+        fillColor: "#f03",
+        fillOpacity: 0.5,
+        radius: 500,
+      }
+    ).addTo(map.value);
+
+    
+
+   
+
+//customer location and destination
+    customerLocationForDriver.value.forEach((location)=>{
+
+
+
   
-  onMounted(async () => {
 
-    await mapStore.getDriverLocation();
-    await mapStore.getCustomerLocationForDriver();
 
-    const { latitude: pickupLat, longitude: pickupLng, place: pickupPlace } = mapStore.getDriverLocationCoordinates();
-  
-    if (
-      pickupLat === undefined || pickupLng === undefined 
-    ) {
-      console.error("One or more coordinates are undefined!");
-      return;
-    }
-  
-    map.value = L.map('map').setView([pickupLat, pickupLng], 14);
-  
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value);
-  
-    L.marker([pickupLat, pickupLng])
-      .addTo(map.value)
-      .bindPopup(`Pickup: ${pickupPlace || 'Unknown pickup location'}`)
-      .openPopup();
-  
-    // customerLocationForDriver
-    customerLocationForDriver.value.forEach((location) => {
+      L.marker([
+    location.location_latitude,
+    location.location_longitude,
+  ])
+    .addTo(map.value)
+    .bindPopup(location.location_address)
+    .openPopup();
 
-        // circle code 
-        L.marker([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)])
-              .addTo(map.value)
-              .bindPopup(location?.location_address || 'Unknown customer location');
+    L.marker([
+  location.destination_latitude,
+  location.destination_longitude,
+  ])
+    .addTo(map.value)
+    .bindPopup(location.destination_address)
+    .openPopup();
 
-        L.circle([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            radius: 500
-        }).addTo(map.value);
-        // end circle
+    L.Routing.control({
+    waypoints: [
+      L.latLng(
+        location.location_latitude,
+        location.location_longitude
+      ),
+      L.latLng(
+        location.destination_latitude,
+        location.destination_longitude
+      ),
+    ],
+    lineOptions: { styles: [{ color: "blue", weight: 5, opacity: 0.8 }] },
+    routeWhileDragging: true,
+  }).addTo(map.value);
 
-      L.marker([location.location_latitude, location.location_longitude])
-        .addTo(map.value)
-        .bindPopup(`Pickup: ${location.value.location_address || 'Unknown pickup location'}`)
-        .openPopup();
 
-      L.marker([location.destination_latitude, location.destination_longitude])
-        .addTo(map.value)
-        .bindPopup(`Destination: ${location.value.destination_address || 'Unknown destination'}`);
+    })
 
-      L.Routing.control({
-        waypoints: [
-          L.latLng(location.location_latitude, location.location_longitude),
-          L.latLng(location.destination_latitude, location.destination_longitude)
-        ],
-        router: L.Routing.mapbox(process.env.VUE_APP_MAPBOX_ACCESS_TOKEN),
-        lineOptions: { styles: [{ color: "blue", weight: 5, opacity: 0.8 }] },
-        routeWhileDragging: true,
-      }).addTo(map.value);
+});
 
-    });
 
-  });
   </script>
   
   

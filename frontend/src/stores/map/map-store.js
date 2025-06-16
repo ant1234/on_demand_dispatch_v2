@@ -157,8 +157,8 @@ export const useMapStore = defineStore('map', () => {
       loading.value = true;
       const data = await getData('/customer_location/driver');
   
-      if (Array.isArray(data) && data.length > 0) {
-        customerLocationForDriver.value = data;
+      if (Array.isArray(data?.data) && data.data.length > 0) {
+        customerLocationForDriver.value = data.data;
       } else {
         customerLocationForDriver.value = [];
       }
@@ -169,7 +169,7 @@ export const useMapStore = defineStore('map', () => {
     } finally {
       loading.value = false;
     }
-  }
+  }  
 
   async function getDriverLocationForCustomer() {
     try {

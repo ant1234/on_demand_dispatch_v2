@@ -73,15 +73,17 @@ class DriverController extends Controller
     public function getDriverLocation(Request $request)
     {
         $driverLocation = DriverLocation::where('user_id', $request->user_id)->first();
-
+    
         if (!is_null($driverLocation)) {
             return response()->json([
-                'address' => $driverLocation->location_address,
-                'latitude' => floatval($driverLocation->location_latitude),
-                'longitude' => floatval($driverLocation->location_longitude)
+                'data' => [
+                    'address' => $driverLocation->location_address,
+                    'latitude' => floatval($driverLocation->location_latitude),
+                    'longitude' => floatval($driverLocation->location_longitude),
+                ]
             ]);
         } else {
-            return response([]);
+            return response()->json(['data' => []]);
         }
     }
 
