@@ -43,6 +43,7 @@ class CustomerTripController extends Controller
         $customerTrip = CustomerTrip::where('user_id', $customerId)
             // ->where('vehicle_id', $request->vehicle_id)
             ->where('trip_status', $request->trip_status)
+            ->orderBy('created_at', 'desc')
             ->first();
 
         if (!is_null($customerTrip)) {

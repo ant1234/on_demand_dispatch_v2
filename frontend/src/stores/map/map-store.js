@@ -213,25 +213,24 @@ export const useMapStore = defineStore('map', () => {
     const userData = getUserData();
 
     try {
-      loading.value = true;
-      const data = await getData(
-        `/customer_trip?user_id=${userData?.user?.id}&trip_status=${ONGOING_STATUS}`
-      );
-      loading.value = false;
-
-      if (Array.isArray(data) && data.length === 0) {
-        window.location.href = "/app/welcome";
-      } else {
-        // 👇 FIXED HERE
-        customerTripData.value = Array.isArray(data) ? data[0] : data;
-      }
+        loading.value = true;
+        const data = await getData(
+            `/customer_trip?user_id=${userData?.user?.id}&trip_status=${ONGOING_STATUS}`
+        );
+        loading.value = false;
+        if (Array.isArray(data) && data.length === 0) {
+            window.location.href = "/app/welcome";
+        } else {
+            customerTripData.value = data;
+            loading.value = false;
+        }
     } catch (errors) {
-      loading.value = false;
-      for (const message of errors) {
-        showError(message);
-      }
+        loading.value = false;
+        for (const message of errors) {
+            showError(message);
+        }
     }
-  }
+}
 
 
   return {
