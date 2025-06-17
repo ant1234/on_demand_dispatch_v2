@@ -179,6 +179,7 @@ export const useMapStore = defineStore('map', () => {
       if (Array.isArray(data) && data.length > 0) {
         driverLocationForCustomer.value = data;
       } else {
+        listenDriverLocationInRealTime();
         driverLocationForCustomer.value = [];
       }
   
@@ -188,6 +189,13 @@ export const useMapStore = defineStore('map', () => {
     } finally {
       loading.value = false;
     }
+  }
+
+  function listenDriverLocationInRealTime() {
+    window.Echo.channel('driverLocation')
+      .listen('DriverLocationEvent', (e) => {
+        driverLocation.value = e.data;
+      });
   }
 
   async function getDriverLocation() {

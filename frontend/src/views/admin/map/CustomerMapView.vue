@@ -135,7 +135,7 @@ onMounted(async () => {
     // circle code 
     L.marker([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)])
       .addTo(map.value)
-      .bindPopup(location?.location_address || 'Unknown driver location');
+      .bindPopup(`<b>Driver : ${location?.user_name}</b></br>` + location?.location_address || 'Unknown driver location');
 
     L.circle([parseFloat(location?.location_latitude), parseFloat(location?.location_longitude)], {
         color: 'red',

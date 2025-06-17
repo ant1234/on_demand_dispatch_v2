@@ -53,8 +53,14 @@
 
     <!-- main section  -->
     <div class="bg-slate w-full">
-        <div class="flex justify-between">
+        <div class="flex justify-end">
             <div></div>
+            <div class="py-3 px-3">
+                <button @click="displayNotificationPage" class="relative inline-flex items-center justify-center p-2 bg-slate-200  rounded-full">
+                    <NotificationIcon class="w-6 h-6" />
+                    <span class="absolute top-0 left-8 px-2 text-white font-semibold block  rounded-full bg-red-500">{{notificationVal}}</span>  
+                </button>
+            </div>
             <div class="py-3 px-3">
                 <img
                 @click="toggleTopNavBarMenu"
@@ -94,15 +100,22 @@
 import ChevronIconLeft from '@/components/icons/ChevronIconLeft.vue';
 import ChevronIconRight from '@/components/icons/ChevronIconRight.vue';
 import { ref } from 'vue';
+import { DRIVER_ROLE, CUSTOMER_ROLE } from '@/constants/roles';
+import { useRouter } from 'vue-router';
 import { getUserData } from '@/helper/utils';
 import { useLoginStore } from '@/stores/auth/login-store';
 import { RouterLink } from 'vue-router';
 import { ADMIN_ROLE } from "@/constants/roles";
+import { storeToRefs } from "pinia";
+import { useMapStore } from '@/stores/map/map-store';
 
 const loginStore = useLoginStore();
 
 const toggleSideBar = ref(false);
 const topNavBarMenu = ref(false);
+const mapStore = useMapStore();
+const { notificationVal } = storeToRefs(mapStore);
+
 const userData = getUserData();
 
 const toggle = () => {
@@ -112,4 +125,22 @@ const toggle = () => {
 const toggleTopNavBarMenu = () => {
     topNavBarMenu.value = !topNavBarMenu.value;
 };
+
+const router = useRouter()
+
+function displayNotificationPage(){
+
+  const role = userData?.user?.role
+
+    if(role === DRIVER_ROLE){
+        notificationVal.value = 0
+        router.push('/customer_notifications')
+    }
+
+    if(role === CUSTOMER_ROLE){
+        notificationVal.value = 0
+        router.push('/driver_notifications')
+    }
+
+    }
 </Script>
