@@ -1,10 +1,9 @@
 import { getUserData, showError, successMsg } from '@/helper/utils';
 import { postData, getData } from '@/helper/http';
-import { ONGOING_STATUS } from '@/constants/trip-status'
+import { ONGOING_STATUS, PENDING_STATUS } from '@/constants/trip-status'
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
-import { PENDING_STATUS } from '@/constants/trip-status';
-
+import { DRIVER_ROLE } from '@/constants/roles';
 
 export const useMapStore = defineStore('map', () => {
 
@@ -18,6 +17,8 @@ export const useMapStore = defineStore('map', () => {
   const customerTripData = ref({});
   const driverLocationForCustomer = ref([]);
   const customerLocationForDriver = ref([]);
+  const notificationVal = ref(0);
+  const allCustomerTripData=ref([]);
 
   const getCustomerLocationCoordinates = () => ({
     latitude: customerLocation.value?.[1],
@@ -64,6 +65,49 @@ export const useMapStore = defineStore('map', () => {
           }
       }
   }
+
+  function listenCustomerLocationInRealTime(){
+    const userData = getUserData()
+    window.Echo.channel("customerLocation").listen(
+        "CustomerLocationEvent",
+        (event) => {
+            const newCustomerLocation=event.customerLocation
+          
+            const newArr= customerLocationForDriver.value.filter((customer)=>customer.user_id!==newCustomerLocation.user_id)
+            let newData=[...newArr, event.customerLocation]
+            customerLocationForDriver.value=[...newData]
+            if(userData?.user?.role===DRIVER_ROLE){
+                notificationVal.value++
+
+            }
+            successMsg('Customer location changed !')
+        
+        }
+    );
+  }
+
+  async function getAllCustomerTrips(userId) {
+      
+      try {
+          loading.value = true;
+          const data = await getData(
+              `/all_customer_trips?user_id=${userId}`
+          );
+          loading.value = false;
+          if (Array.isArray(data) && data.length === 0) {
+              allCustomerTripData.value=[]
+          } else {
+              listenCustomerLocationInRealTime()
+              allCustomerTripData.value=data
+          }
+      } catch (errors) {
+          loading.value = false;
+          for (const message of errors) {
+              showError(message);
+          }
+      }
+  }
+
 
   function validateBooking() {
     return new Promise((resolve) => {
@@ -153,23 +197,27 @@ export const useMapStore = defineStore('map', () => {
   // 
 
   async function getCustomerLocationForDriver() {
-    try {
-      loading.value = true;
-      const data = await getData('/customer_location/driver');
-  
-      if (Array.isArray(data?.data) && data.data.length > 0) {
-        customerLocationForDriver.value = data.data;
-      } else {
-        customerLocationForDriver.value = [];
+
+      try {
+          loading.value = true;
+          const data = await getData(
+              `/customer_location/driver`
+          );
+          loading.value = false;
+          if (Array.isArray(data) && data.length === 0) {
+              customerLocationForDriver.value=[]
+          } else {
+              listenCustomerLocationInRealTime()
+              customerLocationForDriver.value=data
+          }
+      } catch (errors) {
+          loading.value = false;
+          for (const message of errors) {
+              showError(message);
+          }
       }
-  
-    } catch (error) {
-      console.error('Error fetching driver location:', error);
-      customerLocationForDriver.value = [];
-    } finally {
-      loading.value = false;
-    }
-  }  
+  }
+
 
   async function getDriverLocationForCustomer() {
     try {
@@ -252,6 +300,9 @@ export const useMapStore = defineStore('map', () => {
     getCustomerTripData,
     getDriverLocationForCustomer,
     getCustomerLocationForDriver,
+    getAllCustomerTrips,
+    notificationVal,
+    allCustomerTripData,
     customerLocationForDriver,
     driverLocationForCustomer,
     queryDestinationMap,
